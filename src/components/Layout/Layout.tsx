@@ -2,9 +2,10 @@ import React from 'react';
 import { Outlet } from 'react-router-dom';
 import Navigation from '../Navigation/Navigation';
 import Header from '../Header/Header';
+import withRouter from '../HOC/withRouter';
 
 const Layout = () => {
-  const pageTitle = 'Page title';
+  const pageTitle = location.pathname === '/' ? 'Main page' : 'About';
   return (
     <>
       <Header pageTitle={pageTitle} />
@@ -15,4 +16,4 @@ const Layout = () => {
     </>
   );
 };
-export default Layout;
+export default withRouter(Layout);
