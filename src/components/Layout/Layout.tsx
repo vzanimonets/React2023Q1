@@ -5,7 +5,19 @@ import Header from '../Header/Header';
 import withRouter from '../HOC/withRouter';
 
 const Layout = () => {
-  const pageTitle = location.pathname === '/' ? 'Main page' : 'About';
+  const getTitle = () => {
+    switch (location.pathname) {
+      case '/':
+        return 'Main page';
+      case '/about':
+        return 'About page';
+      case '/forms':
+        return 'Forms page';
+      default:
+        return '';
+    }
+  };
+  const pageTitle = getTitle();
   return (
     <>
       <Header pageTitle={pageTitle} />

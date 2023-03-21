@@ -20,6 +20,15 @@ const Navigation = () => {
             About
           </NavLink>
         </li>
+        <li>
+          <NavLink
+            to="/forms"
+            caseSensitive
+            className={({ isActive }) => (isActive ? styles.active : '')}
+          >
+            Forms
+          </NavLink>
+        </li>
       </ul>
     </nav>
   );

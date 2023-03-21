@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import './App.css';
 import HomePage from '../../pages/HomePage';
 import AboutPage from '../../pages/AboutPage';
+import FormPage from '../../pages/FormPage';
 import NotFoundPage from '../../pages/NotFoundPage';
 import Layout from '../Layout/Layout';
 import pic82 from '../../assets/images/82.jpg';
@@ -51,6 +52,7 @@ function App() {
       <Route element={<Layout />}>
         <Route index element={<HomePage data={data} />} />
         <Route path="about" element={<AboutPage />} />
+        <Route path="forms" element={<FormPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>
