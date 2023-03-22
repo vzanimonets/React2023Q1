@@ -3,7 +3,10 @@ import styles from './search.module.css';
 
 class SearchBar extends React.PureComponent {
   state = {
-    initValue: localStorage.getItem('searchVal'),
+    initValue:
+      typeof localStorage.getItem('searchVal') !== undefined
+        ? localStorage.getItem('searchVal')
+        : '',
   };
   private inputRef = createRef<HTMLInputElement>();
 
@@ -19,7 +22,7 @@ class SearchBar extends React.PureComponent {
   render() {
     return (
       <div className={styles.searchBox}>
-        <form action="/home" onSubmit={this.saveToStorage}>
+        <form action="/" onSubmit={this.saveToStorage}>
           <div className={styles.search__input}>
             <button type="submit"></button>
             <input
