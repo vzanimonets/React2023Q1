@@ -16,6 +16,7 @@ class Form extends React.Component {
   private statusRef = createRef<HTMLSelectElement>();
   private radio1Ref = createRef<HTMLInputElement>();
   private radio2Ref = createRef<HTMLInputElement>();
+  private publishedRef = createRef<HTMLInputElement>();
 
   handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -27,28 +28,21 @@ class Form extends React.Component {
       : this.radio2Ref.current?.value;
     const image =
       this.imgRef.current?.files?.length && URL.createObjectURL(this.imgRef.current.files[0]);
+    const published = this.publishedRef.current?.value;
     const item = {
       title: title,
       text: description,
       image: image,
       status: status,
       radio: radio,
+      published: published,
     };
     this.setState({ items: [...this.state.items, item] });
   };
-  uploadImage = (e: ChangeEvent<HTMLInputElement>) => {
-    // const { files } = e.target;
-    // const images = [];
-    // const selecteds = [...[...files]];
-    // console.log(URL.createObjectURL(files));
-    //console.log(this.imgRef);
-    // const image = this.imgRef.current?.value;
-    // image && URL.createObjectURL(image);
-  };
+  uploadImage = (e: ChangeEvent<HTMLInputElement>) => {};
 
   render() {
     const { items } = this.state;
-    debugger;
     return (
       <>
         <form className={styles.form} onSubmit={this.handleSubmit}>
@@ -73,9 +67,6 @@ class Form extends React.Component {
               ref={this.descriptionRef}
             />
           </div>
-          {/*<div className={styles.form__row}>*/}
-          {/*  --{this.imgRef.current?.files && URL.createObjectURL(this.imgRef.current.files[0])}--*/}
-          {/*</div>*/}
           <div className={styles.form__row}>
             <label htmlFor="file" className={styles.upload}>
               Upload image
@@ -88,7 +79,6 @@ class Form extends React.Component {
               onChange={this.uploadImage}
               ref={this.imgRef}
             />
-            {/*<img src={this.state.src} alt="" />*/}
           </div>
           <div className={styles.form__row}>
             <label htmlFor="selectBox">Status</label>
@@ -118,6 +108,15 @@ class Form extends React.Component {
                 ref={this.radio2Ref}
               />
             </div>
+          </div>
+          <div className={styles.form__row}>
+            <label htmlFor="publish">Published:</label>
+            <input
+              type="date"
+              id="publish"
+              ref={this.publishedRef}
+              defaultValue={new Date().toISOString().slice(0, 10)}
+            />
           </div>
           <div className={styles.form__row}>
             <button className={styles.btn} type="submit">

@@ -22,6 +22,7 @@
     cursor: pointer;
 }
 
+.form input[type="date"],
 .form input[type="text"],
 .form select,
 .form button,
