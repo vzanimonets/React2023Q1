@@ -9,6 +9,9 @@ TODO: add validation
 class Form extends React.Component {
   state = {
     items: [],
+    titleValid: false,
+    formErrors: { title: '', description: '', image: '' },
+    formValid: false,
   };
   private titleRef = createRef<HTMLInputElement>();
   private descriptionRef = createRef<HTMLTextAreaElement>();
@@ -22,13 +25,15 @@ class Form extends React.Component {
     e.preventDefault();
     const title = this.titleRef.current?.value;
     const description = this.descriptionRef.current?.value;
+    const image =
+      this.imgRef.current?.files?.length && URL.createObjectURL(this.imgRef.current.files[0]);
     const status = this.statusRef.current?.value;
     const radio = this.radio1Ref.current?.checked
       ? this.radio1Ref.current?.value
       : this.radio2Ref.current?.value;
-    const image =
-      this.imgRef.current?.files?.length && URL.createObjectURL(this.imgRef.current.files[0]);
+
     const published = this.publishedRef.current?.value;
+    this.validate({ title: title, text: description, image: image });
     const item = {
       title: title,
       text: description,
@@ -41,6 +46,36 @@ class Form extends React.Component {
   };
   uploadImage = (e: ChangeEvent<HTMLInputElement>) => {};
 
+  errorClass(error: string) {
+    return error.length === 0 ? '' : styles.hasError;
+  }
+
+  validate(fields: object) {
+    const fieldValidationErrors = this.state.formErrors;
+    let titleValid = this.state.titleValid;
+    for (const [key, value] of Object.entries(fields)) {
+      //console.log(`${key}: ${value}`);
+      //debugger;
+      switch (key) {
+        case 'title':
+          titleValid = value.length > 3;
+          fieldValidationErrors.title = titleValid ? '' : 'title length should be > 3';
+          break;
+        case 'description':
+          break;
+        case 'image':
+          break;
+      }
+    }
+    this.setState(
+      { ...this.state, formErrors: fieldValidationErrors, titleValid: titleValid },
+      this.validateForm
+    );
+  }
+
+  validateForm() {
+    this.setState({ formValid: this.state.titleValid });
+  }
   render() {
     const { items } = this.state;
     return (
@@ -54,8 +89,14 @@ class Form extends React.Component {
               name="itemTitle"
               placeholder="Item title"
               defaultValue=""
+              className={this.errorClass(this.state.formErrors.title)}
               ref={this.titleRef}
             />
+            {this.state.formErrors.title ? (
+              <span className={styles.error__message}>{this.state.formErrors.title}</span>
+            ) : (
+              ''
+            )}
           </div>
           <div className={styles.form__row}>
             <label htmlFor="description">Item description</label>

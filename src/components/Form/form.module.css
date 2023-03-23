@@ -13,6 +13,7 @@
     display: flex;
     align-items: center;
     margin-bottom: 1rem;
+    border: 1px solid transparent;
 }
 
 .form__row > label {
@@ -111,4 +112,12 @@
 
 .btn:hover {
     border-color: #696969;
+}
+
+.form .error__message {
+    color: rgba(255, 0, 0);;
+}
+
+.form input.hasError {
+    border-color: rgba(255, 0, 0);
 }
