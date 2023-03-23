@@ -6,9 +6,13 @@ type ItemPropsType = {
   title: string;
   text: string;
   image: string;
+  status: string;
+  radio: string;
 };
-
-const Item = ({ title, text, image }: ItemPropsType) => {
+/*
+TODO: fix styles
+ */
+const Item = ({ title, text, image, status, radio }: ItemPropsType) => {
   const bgStyle = {
     backgroundImage: `url(${image})`,
   };
@@ -18,6 +22,14 @@ const Item = ({ title, text, image }: ItemPropsType) => {
       <div className={styles.card__content}>
         <div className={styles.card__title}>{title}</div>
         <div className={styles.card__text}>{text}</div>
+        <div>
+          <label>Status:</label>
+          <i>{status}</i>
+        </div>
+        <div>
+          <label>Delivery:</label>
+          <i>{radio}</i>
+        </div>
         <div className={styles.card__btns}>
           <button className={styles.btn}>Button</button>
           <LikeBtn className={styles.icon__like} />
