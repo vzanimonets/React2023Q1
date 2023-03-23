@@ -1,14 +1,57 @@
-import React from 'react';
+import React, { ChangeEvent, createRef, FormEvent } from 'react';
 import styles from './form.module.css';
 import { ReactComponent as UploadIco } from '../../assets/images/upload-icon.svg';
+import List from '../List/List';
 
-class Form extends React.PureComponent {
-  onSubmit = () => {};
+/*
+TODO: add validation
+ */
+class Form extends React.Component {
+  state = {
+    items: [],
+  };
+  private titleRef = createRef<HTMLInputElement>();
+  private descriptionRef = createRef<HTMLTextAreaElement>();
+  private imgRef = createRef<HTMLInputElement>();
+  private statusRef = createRef<HTMLSelectElement>();
+  private radio1Ref = createRef<HTMLInputElement>();
+  private radio2Ref = createRef<HTMLInputElement>();
+
+  handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const title = this.titleRef.current?.value;
+    const description = this.descriptionRef.current?.value;
+    const status = this.statusRef.current?.value;
+    const radio = this.radio1Ref.current?.checked
+      ? this.radio1Ref.current?.value
+      : this.radio2Ref.current?.value;
+    const image =
+      this.imgRef.current?.files?.length && URL.createObjectURL(this.imgRef.current.files[0]);
+    const item = {
+      title: title,
+      text: description,
+      image: image,
+      status: status,
+      radio: radio,
+    };
+    this.setState({ items: [...this.state.items, item] });
+  };
+  uploadImage = (e: ChangeEvent<HTMLInputElement>) => {
+    // const { files } = e.target;
+    // const images = [];
+    // const selecteds = [...[...files]];
+    // console.log(URL.createObjectURL(files));
+    //console.log(this.imgRef);
+    // const image = this.imgRef.current?.value;
+    // image && URL.createObjectURL(image);
+  };
 
   render() {
+    const { items } = this.state;
+    debugger;
     return (
       <>
-        <form className={styles.form} onSubmit={this.onSubmit}>
+        <form className={styles.form} onSubmit={this.handleSubmit}>
           <div className={styles.form__row}>
             <label htmlFor="itemTitle">Item Title</label>
             <input
@@ -17,6 +60,7 @@ class Form extends React.PureComponent {
               name="itemTitle"
               placeholder="Item title"
               defaultValue=""
+              ref={this.titleRef}
             />
           </div>
           <div className={styles.form__row}>
@@ -24,36 +68,55 @@ class Form extends React.PureComponent {
             <textarea
               name="description"
               id="textArea"
-              cols="3"
+              cols={4}
               placeholder="Item description"
-              style={{ resize: 'none' }}
+              ref={this.descriptionRef}
             />
           </div>
+          {/*<div className={styles.form__row}>*/}
+          {/*  --{this.imgRef.current?.files && URL.createObjectURL(this.imgRef.current.files[0])}--*/}
+          {/*</div>*/}
           <div className={styles.form__row}>
             <label htmlFor="file" className={styles.upload}>
               Upload image
               <UploadIco className={styles.upload__ico} />
             </label>
-            <input type="file" id="file" accept="image/*" />
+            <input
+              type="file"
+              id="file"
+              accept="image/*"
+              onChange={this.uploadImage}
+              ref={this.imgRef}
+            />
+            {/*<img src={this.state.src} alt="" />*/}
           </div>
           <div className={styles.form__row}>
             <label htmlFor="selectBox">Status</label>
-            <select name="selectBox" id="selectBox" defaultValue="out">
+            <select name="selectBox" id="selectBox" defaultValue="waiting" ref={this.statusRef}>
               <option value="in">In stock</option>
-              <option value="out">Temporarily Out Of Stock</option>
+              <option value="waiting">Temporarily Out Of Stock</option>
             </select>
           </div>
           <div className={styles.form__row}>
-            <p>Radio</p>
-            <div className={styles.radio__container}>
-              <label>
-                <input type="radio" name="color" defaultValue="Red" defaultChecked />
-                Red
-              </label>
-              <label>
-                <input type="radio" name="color" defaultValue="blue" />
-                Blue
-              </label>
+            <label htmlFor="radio">Delivery:</label>
+            <div className={styles.radio__container} id="radio">
+              <label htmlFor="radio1">Yes</label>
+              <input
+                type="radio"
+                name="delivery"
+                id="radio1"
+                defaultValue="Yes"
+                defaultChecked
+                ref={this.radio1Ref}
+              />
+              <label htmlFor="radio2">No</label>
+              <input
+                type="radio"
+                name="delivery"
+                id="radio2"
+                defaultValue="No"
+                ref={this.radio2Ref}
+              />
             </div>
           </div>
           <div className={styles.form__row}>
@@ -65,6 +128,7 @@ class Form extends React.PureComponent {
             </button>
           </div>
         </form>
+        <List data={items} />
       </>
     );
   }

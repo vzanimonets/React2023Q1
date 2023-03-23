@@ -81,13 +81,22 @@
     cursor: pointer;
 }
 
-.radio__container label {
-    display: inline-block;
+.radio__container {
+    display: flex;
+    justify-content: left;
+    flex: 2;
 }
 
-.radio__container label + label {
+.radio__container label {
+    display: inline-block;
+    cursor: pointer;
+
+}
+
+.radio__container input + label {
     margin-left: 20px;
 }
+
 
 .btn {
     background-color: white;
