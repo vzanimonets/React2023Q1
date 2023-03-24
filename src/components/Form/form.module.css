@@ -9,14 +9,19 @@
     box-shadow: 0 20px 40px -14px rgba(0, 0, 0, 0.25);
 }
 
-.form__row {
+.form fieldset {
     display: flex;
     align-items: center;
     margin-bottom: 1rem;
     border: 1px solid transparent;
+    flex-wrap: wrap;
 }
 
-.form__row > label {
+.form fieldset .error__message {
+    flex-basis: 100%;
+}
+
+.form label {
     display: block;
     flex: 1;
     margin-bottom: 6px;
@@ -39,6 +44,24 @@
     padding-left: 15px;
     flex: 2;
 }
+
+.form .agreement__text{
+    text-align: right;
+    padding-right: .5em;
+}
+.form input[type="checkbox"]{
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+}
+.form .agreement__checkbox__wrapper{
+    border: 2px solid transparent;
+    box-sizing: content-box;
+    display: inline-flex;
+    border-radius: 5px;
+}
+
+
 
 .form input[type="file"] {
     display: none;
@@ -77,16 +100,15 @@
 
 .form select {
     -webkit-appearance: none;
-    background-image: url("icon.svg");
+    /*background-image: url("icon.svg");*/
     background-repeat: no-repeat;
     background-position: right 10px center;
     cursor: pointer;
 }
 
 .radio__container {
-    display: flex;
-    justify-content: left;
     flex: 2;
+    text-align: left;
 }
 
 .radio__container label {
@@ -118,6 +140,6 @@
     color: rgba(255, 0, 0);;
 }
 
-.form input.hasError {
+.hasError input[type="text"],.hasError textarea, .hasError .upload, .hasError input[type="date"], .hasError .agreement__checkbox__wrapper{
     border-color: rgba(255, 0, 0);
 }
