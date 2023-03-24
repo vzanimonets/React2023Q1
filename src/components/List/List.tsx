@@ -13,7 +13,7 @@ const List = ({ data }: PropsType) => {
    */
   return (
     <ul className={styles.cards}>
-      {data.map((item,i) => {
+      {data.map((item, i) => {
         return (
           <li className={styles.cards__item} key={i}>
             <Item {...item} />

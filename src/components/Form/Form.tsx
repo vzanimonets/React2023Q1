@@ -1,4 +1,4 @@
-import React, { ChangeEvent, createRef, FormEvent } from 'react';
+import React, { createRef, FormEvent } from 'react';
 import styles from './form.module.css';
 import { ReactComponent as UploadIco } from '../../assets/images/upload-icon.svg';
 import List from '../List/List';
