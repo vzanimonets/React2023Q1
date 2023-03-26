@@ -1,0 +1,30 @@
+.main_menu {
+    text-align: right;
+    list-style: none;
+    box-shadow: 0 20px 40px -14px rgb(0 0 0 / 25%);
+    display: block;
+}
+
+.main_menu ul {
+    list-style-type: none;
+    padding: 0 30px 0 0;
+}
+
+.main_menu > ul > li {
+    display: inline-block;
+    position: relative;
+}
+
+.main_menu > ul > li > a {
+    display: block;
+    position: relative;
+    font-weight: 600;
+    margin: 30px 10px;
+    font-size: 17px;
+    color: #232323;
+    text-transform: uppercase;
+}
+
+.active {
+    text-decoration: underline;
+}
