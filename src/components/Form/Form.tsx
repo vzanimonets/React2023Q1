@@ -115,7 +115,8 @@ class Form extends React.Component {
   }
 
   displayItems() {
-    this.setState({
+    this.setState(
+      {
         items: [
           ...this.state.items,
           {
