@@ -2,6 +2,7 @@ import React, { createRef, FormEvent } from 'react';
 import styles from './form.module.css';
 import { ReactComponent as UploadIco } from '../../assets/images/upload-icon.svg';
 import List from '../List/List';
+import { v4 as uuidv4 } from 'uuid';
 
 interface validateFields {
   title: string | undefined;
@@ -30,6 +31,7 @@ class Form extends React.Component {
   private radio2Ref = createRef<HTMLInputElement>();
   private publishedRef = createRef<HTMLInputElement>();
   private termsRef = createRef<HTMLInputElement>();
+  private formRef = createRef<HTMLFormElement>();
 
   handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -114,28 +116,32 @@ class Form extends React.Component {
 
   displayItems() {
     this.setState({
-      items: [
-        ...this.state.items,
-        {
-          title: this.titleRef.current?.value,
-          text: this.descriptionRef.current?.value,
-          image:
-            this.imgRef.current?.files?.length && URL.createObjectURL(this.imgRef.current.files[0]),
-          status: this.statusRef.current?.value,
-          radio: this.radio1Ref.current?.checked
-            ? this.radio1Ref.current?.value
-            : this.radio2Ref.current?.value,
-          published: this.publishedRef.current?.value,
-          terms: this.termsRef.current?.checked,
-        },
-      ],
-    });
+        items: [
+          ...this.state.items,
+          {
+            id: uuidv4(),
+            title: this.titleRef.current?.value,
+            text: this.descriptionRef.current?.value,
+            image:
+              this.imgRef.current?.files?.length &&
+              URL.createObjectURL(this.imgRef.current.files[0]),
+            status: this.statusRef.current?.value,
+            radio: this.radio1Ref.current?.checked
+              ? this.radio1Ref.current?.value
+              : this.radio2Ref.current?.value,
+            published: this.publishedRef.current?.value,
+            terms: this.termsRef.current?.checked,
+          },
+        ],
+      },
+      () => this.formRef.current?.reset()
+    );
   }
 
   render() {
     return (
       <>
-        <form className={styles.form} onSubmit={this.handleSubmit}>
+        <form className={styles.form} ref={this.formRef} onSubmit={this.handleSubmit}>
           <fieldset className={this.errorClass(this.state.formErrors.title)}>
             <label htmlFor="itemTitle">Item Title</label>
             <input

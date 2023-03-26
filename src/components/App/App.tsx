@@ -19,6 +19,8 @@ export type ItemType = {
   title: string;
   text: string;
   image: string;
+  radio?: string;
+  status?: string | undefined;
 };
 
 const data = [

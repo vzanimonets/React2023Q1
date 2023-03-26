@@ -3,11 +3,12 @@ import React from 'react';
 import { ReactComponent as LikeBtn } from '../../assets/images/like.svg';
 
 type ItemPropsType = {
+  id: string;
   title: string;
   text: string;
   image: string;
-  status: string;
-  radio: string;
+  status?: string | undefined;
+  radio?: string | undefined;
 };
 /*
 TODO: fix styles

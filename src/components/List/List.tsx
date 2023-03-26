@@ -8,14 +8,11 @@ type PropsType = {
 };
 
 const List = ({ data }: PropsType) => {
-  /**
-   * TODO: implement key generation
-   */
   return (
     <ul className={styles.cards}>
-      {data.map((item, i) => {
+      {data.map((item) => {
         return (
-          <li className={styles.cards__item} key={i}>
+          <li className={styles.cards__item} key={item.id}>
             <Item {...item} />
           </li>
         );
