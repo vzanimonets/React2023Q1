@@ -82,7 +82,7 @@ class Form extends React.Component {
           break;
         case 'terms':
           termsValid = !!value;
-          fieldValidationErrors.terms = imageValid ? '' : 'terms should be agreed';
+          fieldValidationErrors.terms = termsValid ? '' : 'terms should be agreed';
           break;
       }
     }
@@ -115,6 +115,7 @@ class Form extends React.Component {
   }
 
   displayItems() {
+    alert('The data has been saved!');
     this.setState(
       {
         items: [
