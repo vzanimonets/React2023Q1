@@ -41,7 +41,7 @@ input[type='search']::placeholder {
     color: #555555;
 }
 
-.search button[type='submit'] {
+.searchBox button[type='submit'] {
     text-indent: -999px;
     overflow: hidden;
     width: 40px;
