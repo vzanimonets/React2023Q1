@@ -1,4 +1,4 @@
-import React, { BaseSyntheticEvent, useEffect, useRef, useState } from 'react';
+import React, { BaseSyntheticEvent, useCallback, useEffect, useRef, useState } from 'react';
 import styles from './form.module.css';
 import { ReactComponent as UploadIco } from '../../assets/images/upload-icon.svg';
 import List from '../List/List';
@@ -22,19 +22,12 @@ const Form = () => {
     handleSubmit,
     clearErrors,
     setError,
+    reset,
     formState: { errors },
   } = useForm<validateFields>();
 
   const [fileName, setFileName] = useState<string>('');
   const [items, setItems] = useState<ItemType[]>([]);
-  const formRef = useRef<HTMLFormElement>(null);
-
-  useEffect(() => {
-    if (items.length) {
-      alert('Add new item!');
-      resetForm();
-    }
-  }, [items]);
 
   const onSubmit: SubmitHandler<validateFields> = (data) => {
     const newItem = {
@@ -57,6 +50,7 @@ const Form = () => {
       });
       return;
     }
+    clearErrors('image');
     setFileName(files[0].name);
   };
 
@@ -70,15 +64,22 @@ const Form = () => {
     }
   };
 
-  const resetForm = () => {
+  const resetForm = useCallback(() => {
     clearErrors();
     setFileName('');
-    formRef.current?.reset();
-  };
+    reset();
+  }, [clearErrors]);
+
+  useEffect(() => {
+    if (items.length) {
+      alert('Add new item!');
+      resetForm();
+    }
+  }, [items, resetForm]);
 
   return (
     <>
-      <form className={styles.form} ref={formRef} onSubmit={handleSubmit(onSubmit)}>
+      <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
         <fieldset className={errors.title ? styles.hasError : ''}>
           <label htmlFor="itemTitle">Item Title</label>
           <input
