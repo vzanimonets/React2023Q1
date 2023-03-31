@@ -27,25 +27,71 @@ const data = [
   {
     id: uuidv4(),
     title: 'Title',
-    text: ` Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus aliquid
+    description: ` Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus aliquid
                     exercitationem fuga fugit inventore laboriosam quis rem repellendus sint totam!
                     Alias aspernatur at, autem distinctio iste laboriosam non nostrum unde.`,
     image: `${pic82}`,
+    delivery: 'No',
+    status: 'in stock',
   },
-  { id: uuidv4(), title: 'Title', text: 'Text', image: `${pic39}` },
-  { id: uuidv4(), title: 'Title', text: 'Text', image: `${pic82}` },
-  { id: uuidv4(), title: 'Title', text: 'Text', image: `${pic10}` },
-  { id: uuidv4(), title: 'Title', text: 'Text', image: `${pic12}` },
-  { id: uuidv4(), title: 'Title', text: 'Text', image: `${pic30}` },
   {
     id: uuidv4(),
     title: 'Title',
-    text: ` Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus aliquid
+    description: 'Text',
+    image: `${pic39}`,
+    delivery: 'No',
+    status: 'waiting',
+  },
+  {
+    id: uuidv4(),
+    title: 'Title',
+    description: 'Text',
+    image: `${pic82}`,
+    delivery: 'No',
+    status: 'waiting',
+  },
+  {
+    id: uuidv4(),
+    title: 'Title',
+    description: 'Text',
+    image: `${pic10}`,
+    delivery: 'Yes',
+    status: 'in stock',
+  },
+  {
+    id: uuidv4(),
+    title: 'Title',
+    description: 'Text',
+    image: `${pic12}`,
+    delivery: 'No',
+    status: 'waiting',
+  },
+  {
+    id: uuidv4(),
+    title: 'Title',
+    description: 'Text',
+    image: `${pic30}`,
+    delivery: 'No',
+    status: 'waiting',
+  },
+  {
+    id: uuidv4(),
+    title: 'Title',
+    description: ` Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus aliquid
                     exercitationem fuga fugit inventore laboriosam quis rem repellendus sint totam!
                     Alias aspernatur at, autem distinctio iste laboriosam non nostrum unde.`,
     image: `${pic15}`,
+    delivery: 'Yes',
+    status: 'waiting',
   },
-  { id: uuidv4(), title: 'Title', text: 'Text', image: `${pic39}` },
+  {
+    id: uuidv4(),
+    title: 'Title',
+    description: 'Text',
+    image: `${pic39}`,
+    delivery: 'No',
+    status: 'waiting',
+  },
 ];
 
 function App() {
