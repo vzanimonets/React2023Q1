@@ -24,7 +24,9 @@ const Form = () => {
     setError,
     reset,
     formState: { errors },
-  } = useForm<validateFields>();
+  } = useForm<validateFields>({
+    mode: 'onSubmit',
+  });
 
   const [fileName, setFileName] = useState<string>('');
   const [items, setItems] = useState<ItemType[]>([]);
