@@ -17,10 +17,10 @@ import pic15 from '../../assets/images/15.jpg';
 export type ItemType = {
   id: string;
   title: string;
-  text: string;
+  description: string;
   image: string;
-  radio?: string;
-  status?: string | undefined;
+  delivery: string;
+  status: string;
 };
 
 const data = [

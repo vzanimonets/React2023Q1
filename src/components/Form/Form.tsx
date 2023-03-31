@@ -1,262 +1,229 @@
-import React, { createRef, FormEvent } from 'react';
+import React, { BaseSyntheticEvent, useEffect, useRef, useState } from 'react';
 import styles from './form.module.css';
 import { ReactComponent as UploadIco } from '../../assets/images/upload-icon.svg';
 import List from '../List/List';
 import { v4 as uuidv4 } from 'uuid';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { ItemType } from '../App/App';
 
 interface validateFields {
-  title: string | undefined;
-  description: string | undefined;
-  image: string | number | undefined;
-  published: string | undefined;
-  terms: boolean | undefined;
+  title: string;
+  description: string;
+  image: Array<Blob>;
+  published: string;
+  status: string;
+  delivery: string;
+  terms: boolean;
 }
 
-class Form extends React.Component {
-  state = {
-    items: [],
-    titleValid: false,
-    descriptionValid: false,
-    imageValid: false,
-    publishedValid: false,
-    termsValid: false,
-    formErrors: { title: '', description: '', image: '', published: '', terms: '' },
-    formValid: false,
-  };
-  private titleRef = createRef<HTMLInputElement>();
-  private descriptionRef = createRef<HTMLTextAreaElement>();
-  private imgRef = createRef<HTMLInputElement>();
-  private statusRef = createRef<HTMLSelectElement>();
-  private radio1Ref = createRef<HTMLInputElement>();
-  private radio2Ref = createRef<HTMLInputElement>();
-  private publishedRef = createRef<HTMLInputElement>();
-  private termsRef = createRef<HTMLInputElement>();
-  private formRef = createRef<HTMLFormElement>();
+const Form = () => {
+  const {
+    register,
+    handleSubmit,
+    clearErrors,
+    setError,
+    formState: { errors },
+  } = useForm<validateFields>();
 
-  handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const [fileName, setFileName] = useState<string>('');
+  const [items, setItems] = useState<ItemType[]>([]);
+  const formRef = useRef<HTMLFormElement>(null);
 
-    this.validate({
-      title: this.titleRef.current?.value,
-      description: this.descriptionRef.current?.value,
-      image:
-        this.imgRef.current?.files?.length && URL.createObjectURL(this.imgRef.current.files[0]),
-      published: this.publishedRef.current?.value,
-      terms: this.termsRef.current?.checked,
-    });
-  };
-
-  errorClass(error: string) {
-    return error.length === 0 ? '' : styles.hasError;
-  }
-
-  validate(fields: validateFields) {
-    const fieldValidationErrors = this.state.formErrors;
-    let titleValid = this.state.titleValid;
-    let descriptionValid = this.state.descriptionValid;
-    let imageValid = this.state.imageValid;
-    let publishedValid = this.state.publishedValid;
-    let termsValid = this.state.termsValid;
-
-    for (const [key, value] of Object.entries(fields)) {
-      switch (key) {
-        case 'title':
-          titleValid = value.length > 3;
-          fieldValidationErrors.title = titleValid ? '' : 'title length should be > 3';
-          break;
-        case 'description':
-          descriptionValid = value.length > 20;
-          fieldValidationErrors.description = descriptionValid
-            ? ''
-            : 'description length should be > 20';
-          break;
-        case 'image':
-          imageValid = !!value;
-          fieldValidationErrors.image = imageValid ? '' : 'Image  is Required';
-          break;
-        case 'published':
-          publishedValid = new Date(value).getTime() <= Date.now();
-          fieldValidationErrors.published = publishedValid
-            ? ''
-            : 'Published date can not be later than today';
-          break;
-        case 'terms':
-          termsValid = !!value;
-          fieldValidationErrors.terms = termsValid ? '' : 'terms should be agreed';
-          break;
-      }
+  useEffect(() => {
+    if (items.length) {
+      alert('Add new item!');
+      resetForm();
     }
-    this.setState(
-      {
-        ...this.state,
-        formErrors: fieldValidationErrors,
-        titleValid: titleValid,
-        descriptionValid: descriptionValid,
-        imageValid: imageValid,
-        publishedValid: publishedValid,
-        termsValid: termsValid,
-      },
-      this.validateForm
-    );
-  }
+  }, [items]);
 
-  validateForm() {
-    this.setState(
-      {
-        formValid:
-          this.state.titleValid &&
-          this.state.descriptionValid &&
-          this.state.imageValid &&
-          this.state.publishedValid &&
-          this.state.termsValid,
-      },
-      () => this.state.formValid && this.displayItems()
-    );
-  }
+  const onSubmit: SubmitHandler<validateFields> = (data) => {
+    const newItem = {
+      id: uuidv4(),
+      title: data.title,
+      description: data.description,
+      image: URL.createObjectURL(data.image[0]),
+      delivery: data.delivery,
+      status: data.status,
+    };
+    setItems([newItem, ...items]);
+  };
 
-  displayItems() {
-    alert('The data has been saved!');
-    this.setState(
-      {
-        items: [
-          ...this.state.items,
-          {
-            id: uuidv4(),
-            title: this.titleRef.current?.value,
-            text: this.descriptionRef.current?.value,
-            image:
-              this.imgRef.current?.files?.length &&
-              URL.createObjectURL(this.imgRef.current.files[0]),
-            status: this.statusRef.current?.value,
-            radio: this.radio1Ref.current?.checked
-              ? this.radio1Ref.current?.value
-              : this.radio2Ref.current?.value,
-            published: this.publishedRef.current?.value,
-            terms: this.termsRef.current?.checked,
-          },
-        ],
-      },
-      () => this.formRef.current?.reset()
-    );
-  }
+  const changeFile = ({ target }: BaseSyntheticEvent) => {
+    const { files } = target;
+    if (!files[0].type.startsWith('image/')) {
+      setError('image', {
+        type: 'custom',
+        message: 'Wrong type of the file',
+      });
+      return;
+    }
+    setFileName(files[0].name);
+  };
 
-  render() {
-    return (
-      <>
-        <form className={styles.form} ref={this.formRef} onSubmit={this.handleSubmit}>
-          <fieldset className={this.errorClass(this.state.formErrors.title)}>
-            <label htmlFor="itemTitle">Item Title</label>
+  const validateDate = ({ target }: BaseSyntheticEvent) => {
+    const { value } = target;
+    if (new Date(value).getTime() <= Date.now()) {
+      setError('published', {
+        type: 'custom',
+        message: 'Published date can not be later than today',
+      });
+    }
+  };
+
+  const resetForm = () => {
+    clearErrors();
+    setFileName('');
+    formRef.current?.reset();
+  };
+
+  return (
+    <>
+      <form className={styles.form} ref={formRef} onSubmit={handleSubmit(onSubmit)}>
+        <fieldset className={errors.title ? styles.hasError : ''}>
+          <label htmlFor="itemTitle">Item Title</label>
+          <input
+            type="text"
+            id="itemTitle"
+            placeholder="Item title"
+            defaultValue=""
+            {...register('title', {
+              required: 'This field is required',
+              minLength: { value: 4, message: 'title length should be > 3' },
+            })}
+          />
+          {errors.title ? (
+            <span className={styles.error__message}>{errors.title.message}</span>
+          ) : (
+            ''
+          )}
+        </fieldset>
+        <fieldset className={errors.description ? styles.hasError : ''}>
+          <label htmlFor="description">Item description</label>
+          <textarea
+            id="textArea"
+            cols={4}
+            placeholder="Item description"
+            {...register('description', {
+              required: 'This field is required',
+              minLength: { value: 20, message: 'title length should be > 20' },
+            })}
+          />
+          {errors.description ? (
+            <span className={styles.error__message}>{errors.description.message}</span>
+          ) : (
+            ''
+          )}
+        </fieldset>
+        <fieldset className={errors.image ? styles.hasError : ''}>
+          <label htmlFor="file" className={styles.upload}>
+            {fileName ? fileName : 'Upload image...'}
+            <UploadIco className={styles.upload__ico} />
+          </label>
+          <input
+            type="file"
+            id="file"
+            accept="image/*"
+            {...register('image', {
+              onChange: changeFile,
+              required: 'This field is required',
+            })}
+          />
+          {errors.image && <span className={styles.error__message}>{errors.image.message}</span>}
+        </fieldset>
+        <fieldset className={errors.status ? styles.hasError : ''}>
+          <label htmlFor="selectBox">Status</label>
+          <select
+            id="selectBox"
+            defaultValue=""
+            {...register('status', {
+              required: 'This field is required',
+            })}
+          >
+            <option value="">--Select status--</option>
+            <option value="in stock">In stock</option>
+            <option value="waiting">Temporarily Out Of Stock</option>
+          </select>
+          {errors.status ? (
+            <span className={styles.error__message}>{errors.status.message}</span>
+          ) : (
+            ''
+          )}
+        </fieldset>
+        <fieldset>
+          <label htmlFor="radio">Delivery:</label>
+          <div className={styles.radio__container} id="radio">
+            <label htmlFor="radio1">Yes</label>
             <input
-              type="text"
-              id="itemTitle"
-              name="itemTitle"
-              placeholder="Item title"
-              defaultValue=""
-              ref={this.titleRef}
+              type="radio"
+              id="radio1"
+              defaultValue="Yes"
+              {...register('delivery', {
+                required: true,
+              })}
             />
-            {this.state.formErrors.title ? (
-              <span className={styles.error__message}>{this.state.formErrors.title}</span>
-            ) : (
-              ''
-            )}
-          </fieldset>
-          <fieldset className={this.errorClass(this.state.formErrors.description)}>
-            <label htmlFor="description">Item description</label>
-            <textarea
-              name="description"
-              id="textArea"
-              cols={4}
-              placeholder="Item description"
-              ref={this.descriptionRef}
-            />
-            {this.state.formErrors.description ? (
-              <span className={styles.error__message}>{this.state.formErrors.description}</span>
-            ) : (
-              ''
-            )}
-          </fieldset>
-          <fieldset className={this.errorClass(this.state.formErrors.image)}>
-            <label htmlFor="file" className={styles.upload}>
-              Upload image
-              <UploadIco className={styles.upload__ico} />
-            </label>
-            <input type="file" id="file" accept="image/*" ref={this.imgRef} />
-            {this.state.formErrors.image ? (
-              <span className={styles.error__message}>{this.state.formErrors.image}</span>
-            ) : (
-              ''
-            )}
-          </fieldset>
-          <fieldset>
-            <label htmlFor="selectBox">Status</label>
-            <select name="selectBox" id="selectBox" defaultValue="waiting" ref={this.statusRef}>
-              <option value="in">In stock</option>
-              <option value="waiting">Temporarily Out Of Stock</option>
-            </select>
-          </fieldset>
-          <fieldset>
-            <label htmlFor="radio">Delivery:</label>
-            <div className={styles.radio__container} id="radio">
-              <label htmlFor="radio1">Yes</label>
-              <input
-                type="radio"
-                name="delivery"
-                id="radio1"
-                defaultValue="Yes"
-                defaultChecked
-                ref={this.radio1Ref}
-              />
-              <label htmlFor="radio2">No</label>
-              <input
-                type="radio"
-                name="delivery"
-                id="radio2"
-                defaultValue="No"
-                ref={this.radio2Ref}
-              />
-            </div>
-          </fieldset>
-          <fieldset className={this.errorClass(this.state.formErrors.published)}>
-            <label htmlFor="publish">Published:</label>
+            <label htmlFor="radio2">No</label>
             <input
-              type="date"
-              id="publish"
-              ref={this.publishedRef}
-              defaultValue={new Date().toISOString().slice(0, 10)}
-              className={this.errorClass(this.state.formErrors.published)}
+              type="radio"
+              id="radio2"
+              defaultValue="No"
+              {...register('delivery', {
+                required: true,
+              })}
             />
-            {this.state.formErrors.published ? (
-              <span className={styles.error__message}>{this.state.formErrors.published}</span>
-            ) : (
-              ''
+            {errors.delivery?.type === 'required' && (
+              <span className={styles.error__message}>This field is required.</span>
             )}
-          </fieldset>
-          <fieldset className={this.errorClass(this.state.formErrors.terms)}>
-            <label htmlFor="terms" className={styles.agreement__text}>
-              I agree to the terms
-            </label>
-            <span className={styles.agreement__checkbox__wrapper}>
-              <input type="checkbox" id="terms" ref={this.termsRef} />
-            </span>
-            {this.state.formErrors.terms ? (
-              <span className={styles.error__message}>{this.state.formErrors.terms}</span>
-            ) : (
-              ''
-            )}
-          </fieldset>
-          <fieldset>
-            <button className={styles.btn} type="submit">
-              Send
-            </button>
-            <button className={styles.btn} type="reset">
-              Reset
-            </button>
-          </fieldset>
-        </form>
-        <List data={this.state.items} />
-      </>
-    );
-  }
-}
+          </div>
+        </fieldset>
+        <fieldset className={''}>
+          <label htmlFor="publish">Published:</label>
+          <input
+            type="date"
+            id="publish"
+            {...register('published', {
+              valueAsDate: true,
+              onChange: validateDate,
+            })}
+            defaultValue={new Date().toISOString().slice(0, 10)}
+            className={''}
+          />
+          {errors.published ? (
+            <span className={styles.error__message}>{errors.published.message}</span>
+          ) : (
+            ''
+          )}
+        </fieldset>
+        <fieldset className={errors.terms ? styles.hasError : ''}>
+          <label htmlFor="terms" className={styles.agreement__text}>
+            I agree to the terms
+          </label>
+          <span className={styles.agreement__checkbox__wrapper}>
+            <input
+              type="checkbox"
+              id="terms"
+              {...register('terms', {
+                required: 'This field is required',
+              })}
+            />
+          </span>
+          {errors.terms ? (
+            <span className={styles.error__message}>{errors.terms.message}</span>
+          ) : (
+            ''
+          )}
+        </fieldset>
+        <fieldset>
+          <button className={styles.btn} type="submit">
+            Send
+          </button>
+          <button className={styles.btn} type="reset" onClick={resetForm}>
+            Reset
+          </button>
+        </fieldset>
+      </form>
+      <List data={items} />
+    </>
+  );
+};
 
 export default Form;
