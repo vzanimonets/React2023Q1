@@ -1,4 +1,4 @@
-import React, { BaseSyntheticEvent, useCallback, useEffect, useRef, useState } from 'react';
+import React, { BaseSyntheticEvent, useCallback, useEffect, useState } from 'react';
 import styles from './form.module.css';
 import { ReactComponent as UploadIco } from '../../assets/images/upload-icon.svg';
 import List from '../List/List';
@@ -23,6 +23,8 @@ const Form = () => {
     clearErrors,
     setError,
     reset,
+    resetField,
+    //   watch,
     formState: { errors },
   } = useForm<validateFields>({
     mode: 'onSubmit',
@@ -30,6 +32,7 @@ const Form = () => {
 
   const [fileName, setFileName] = useState<string>('');
   const [items, setItems] = useState<ItemType[]>([]);
+  // const watchFileField = watch('image');
 
   const onSubmit: SubmitHandler<validateFields> = (data) => {
     const newItem = {
@@ -46,6 +49,7 @@ const Form = () => {
   const changeFile = ({ target }: BaseSyntheticEvent) => {
     const { files } = target;
     if (!files[0].type.startsWith('image/')) {
+      resetField('image');
       setError('image', {
         type: 'custom',
         message: 'Wrong type of the file',
@@ -58,7 +62,7 @@ const Form = () => {
 
   const validateDate = ({ target }: BaseSyntheticEvent) => {
     const { value } = target;
-    if (new Date(value).getTime() <= Date.now()) {
+    if (new Date(value).getTime() <= new Date().getTime()) {
       setError('published', {
         type: 'custom',
         message: 'Published date can not be later than today',
@@ -70,7 +74,12 @@ const Form = () => {
     clearErrors();
     setFileName('');
     reset();
-  }, [clearErrors]);
+  }, [clearErrors, reset]);
+
+  // useEffect(() => {
+  //   const subscription = watch((value, { name, type }) => console.log(value, name, type));
+  //   return () => subscription.unsubscribe();
+  // }, [watch]);
 
   useEffect(() => {
     if (items.length) {
@@ -94,11 +103,7 @@ const Form = () => {
               minLength: { value: 4, message: 'title length should be > 3' },
             })}
           />
-          {errors.title ? (
-            <span className={styles.error__message}>{errors.title.message}</span>
-          ) : (
-            ''
-          )}
+          {errors.title && <span className={styles.error__message}>{errors.title.message}</span>}
         </fieldset>
         <fieldset className={errors.description ? styles.hasError : ''}>
           <label htmlFor="description">Item description</label>
@@ -111,10 +116,8 @@ const Form = () => {
               minLength: { value: 20, message: 'title length should be > 20' },
             })}
           />
-          {errors.description ? (
+          {errors.description && (
             <span className={styles.error__message}>{errors.description.message}</span>
-          ) : (
-            ''
           )}
         </fieldset>
         <fieldset className={errors.image ? styles.hasError : ''}>
@@ -131,7 +134,12 @@ const Form = () => {
               required: 'This field is required',
             })}
           />
-          {errors.image && <span className={styles.error__message}>{errors.image.message}</span>}
+          {errors.image?.type === 'custom' && (
+            <span className={styles.error__message}>{errors.image.message}</span>
+          )}
+          {errors.image?.type === 'required' && (
+            <span className={styles.error__message}>{errors.image.message}</span>
+          )}
         </fieldset>
         <fieldset className={errors.status ? styles.hasError : ''}>
           <label htmlFor="selectBox">Status</label>
@@ -146,11 +154,7 @@ const Form = () => {
             <option value="in stock">In stock</option>
             <option value="waiting">Temporarily Out Of Stock</option>
           </select>
-          {errors.status ? (
-            <span className={styles.error__message}>{errors.status.message}</span>
-          ) : (
-            ''
-          )}
+          {errors.status && <span className={styles.error__message}>{errors.status.message}</span>}
         </fieldset>
         <fieldset>
           <label htmlFor="radio">Delivery:</label>
@@ -178,22 +182,20 @@ const Form = () => {
             )}
           </div>
         </fieldset>
-        <fieldset className={''}>
+        <fieldset className={errors.published ? styles.hasError : ''}>
           <label htmlFor="publish">Published:</label>
           <input
             type="date"
             id="publish"
             {...register('published', {
+              required: 'This field is required',
               valueAsDate: true,
               onChange: validateDate,
             })}
-            defaultValue={new Date().toISOString().slice(0, 10)}
             className={''}
           />
-          {errors.published ? (
+          {errors.published && (
             <span className={styles.error__message}>{errors.published.message}</span>
-          ) : (
-            ''
           )}
         </fieldset>
         <fieldset className={errors.terms ? styles.hasError : ''}>
@@ -209,10 +211,8 @@ const Form = () => {
               })}
             />
           </span>
-          {errors.terms ? (
+          {errors.terms &&(
             <span className={styles.error__message}>{errors.terms.message}</span>
-          ) : (
-            ''
           )}
         </fieldset>
         <fieldset>
