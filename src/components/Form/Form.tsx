@@ -5,8 +5,12 @@ import List from '../List/List';
 import { v4 as uuidv4 } from 'uuid';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { ItemType } from '../App/App';
+import LabeledInput from '../LabeledInput/LabeledInput';
+import FieldSet from '../FieldSet/FieldSet';
+import LabeledTextArea from '../LabeledTextArae/LabeledTextArea';
+import LabeledSelect from '../LabeledSelect/LabeledSelect';
 
-interface validateFields {
+export interface validateFields {
   title: string;
   description: string;
   image: Array<Blob>;
@@ -15,6 +19,15 @@ interface validateFields {
   delivery: string;
   terms: boolean;
 }
+
+export type FormFieldsType =
+  | 'title'
+  | 'description'
+  | 'image'
+  | 'published'
+  | 'status'
+  | 'delivery'
+  | 'terms';
 
 const Form = () => {
   const {
@@ -28,6 +41,7 @@ const Form = () => {
     formState: { errors },
   } = useForm<validateFields>({
     mode: 'onSubmit',
+    reValidateMode: 'onSubmit',
   });
 
   const [fileName, setFileName] = useState<string>('');
@@ -91,130 +105,138 @@ const Form = () => {
   return (
     <>
       <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
-        <fieldset className={errors.title ? styles.hasError : ''}>
-          <label htmlFor="itemTitle">Item Title</label>
-          <input
+        <FieldSet errors={errors.title?.message}>
+          <LabeledInput
+            label="Item Title"
             type="text"
-            id="itemTitle"
             placeholder="Item title"
-            defaultValue=""
-            {...register('title', {
+            name="title"
+            register={register}
+            errors={errors.title?.message}
+            rules={{
               required: 'This field is required',
               minLength: { value: 4, message: 'title length should be > 3' },
-            })}
+            }}
           />
-          {errors.title && <span className={styles.error__message}>{errors.title.message}</span>}
-        </fieldset>
-        <fieldset className={errors.description ? styles.hasError : ''}>
-          <label htmlFor="description">Item description</label>
-          <textarea
-            id="textArea"
+        </FieldSet>
+        <FieldSet errors={errors.description?.message}>
+          <LabeledTextArea
+            register={register}
+            name={'description'}
+            label={'Item description'}
             cols={4}
             placeholder="Item description"
-            {...register('description', {
+            errors={errors.description?.message}
+            rules={{
               required: 'This field is required',
-              minLength: { value: 20, message: 'title length should be > 20' },
-            })}
+              minLength: { value: 21, message: 'title length should be > 20' },
+            }}
           />
-          {errors.description && (
-            <span className={styles.error__message}>{errors.description.message}</span>
-          )}
-        </fieldset>
-        <fieldset className={errors.image ? styles.hasError : ''}>
+        </FieldSet>
+        <FieldSet errors={errors.image?.message}>
           <label htmlFor="file" className={styles.upload}>
             {fileName ? fileName : 'Upload image...'}
             <UploadIco className={styles.upload__ico} />
           </label>
-          <input
+          <LabeledInput
             type="file"
+            name="image"
             id="file"
             accept="image/*"
-            {...register('image', {
+            register={register}
+            rules={{
               onChange: changeFile,
               required: 'This field is required',
-            })}
+            }}
+            errors={errors.image?.message}
           />
-          {errors.image?.type === 'custom' && (
-            <span className={styles.error__message}>{errors.image.message}</span>
-          )}
-          {errors.image?.type === 'required' && (
-            <span className={styles.error__message}>{errors.image.message}</span>
-          )}
-        </fieldset>
-        <fieldset className={errors.status ? styles.hasError : ''}>
-          <label htmlFor="selectBox">Status</label>
-          <select
-            id="selectBox"
+        </FieldSet>
+        <FieldSet errors={errors.status?.message}>
+          <LabeledSelect
+            label="Status"
             defaultValue=""
-            {...register('status', {
+            errors={errors.status?.message}
+            name="status"
+            register={register}
+            rules={{
               required: 'This field is required',
-            })}
-          >
-            <option value="">--Select status--</option>
-            <option value="in stock">In stock</option>
-            <option value="waiting">Temporarily Out Of Stock</option>
-          </select>
-          {errors.status && <span className={styles.error__message}>{errors.status.message}</span>}
-        </fieldset>
-        <fieldset>
+            }}
+            options={[
+              { value: '', label: '--Select status--' },
+              { value: 'in stock', label: 'In stock' },
+              { value: 'waiting', label: 'Temporarily Out Of Stock' },
+            ]}
+          />
+        </FieldSet>
+        <FieldSet>
           <label htmlFor="radio">Delivery:</label>
           <div className={styles.radio__container} id="radio">
-            <label htmlFor="radio1">Yes</label>
-            <input
+            <LabeledInput
+              label="No"
               type="radio"
               id="radio1"
-              defaultValue="Yes"
-              {...register('delivery', {
-                required: true,
-              })}
+              placeholder="Item title"
+              name="delivery"
+              defaultValue="No"
+              register={register}
+              errors={errors.delivery?.message}
+              rules={{
+                required: 'This field is required',
+              }}
             />
-            <label htmlFor="radio2">No</label>
-            <input
+            <LabeledInput
+              label="Yes"
               type="radio"
               id="radio2"
+              placeholder="Item title"
+              name="delivery"
               defaultValue="No"
-              {...register('delivery', {
+              register={register}
+              errors={errors.delivery?.message}
+              rules={{
                 required: true,
-              })}
+              }}
             />
-            {errors.delivery?.type === 'required' && (
-              <span className={styles.error__message}>This field is required.</span>
-            )}
           </div>
-        </fieldset>
-        <fieldset className={errors.published ? styles.hasError : ''}>
-          <label htmlFor="publish">Published:</label>
-          <input
+          {errors.delivery?.type === 'required' && (
+            <span className={styles.error__message}>This field is required.</span>
+          )}
+        </FieldSet>
+        <FieldSet errors={errors.published?.message}>
+          <LabeledInput
             type="date"
             id="publish"
-            {...register('published', {
+            name="published"
+            label="Published"
+            register={register}
+            errors={errors.published?.message}
+            rules={{
               required: 'This field is required',
               valueAsDate: true,
               onChange: validateDate,
-            })}
-            className={''}
+            }}
           />
-          {errors.published && (
-            <span className={styles.error__message}>{errors.published.message}</span>
-          )}
-        </fieldset>
-        <fieldset className={errors.terms ? styles.hasError : ''}>
+        </FieldSet>
+        <FieldSet errors={errors.terms}>
           <label htmlFor="terms" className={styles.agreement__text}>
             I agree to the terms
           </label>
           <span className={styles.agreement__checkbox__wrapper}>
-            <input
+            <LabeledInput
               type="checkbox"
               id="terms"
-              {...register('terms', {
-                required: 'This field is required',
-              })}
+              errors={errors.terms?.message}
+              register={register}
+              name="terms"
+              rules={{
+                required: true,
+              }}
             />
           </span>
-          {errors.terms &&(
-            <span className={styles.error__message}>{errors.terms.message}</span>
+          {errors.delivery?.type === 'required' && (
+            <span className={styles.error__message}>terms should be agreed.</span>
           )}
-        </fieldset>
+        </FieldSet>
         <fieldset>
           <button className={styles.btn} type="submit">
             Send
