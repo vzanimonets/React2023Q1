@@ -233,7 +233,7 @@ const Form = () => {
               }}
             />
           </span>
-          {errors.delivery?.type === 'required' && (
+          {errors.terms?.type === 'required' && (
             <span className={styles.error__message}>terms should be agreed.</span>
           )}
         </FieldSet>
