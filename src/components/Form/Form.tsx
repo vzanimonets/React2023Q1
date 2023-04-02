@@ -37,7 +37,6 @@ const Form = () => {
     setError,
     reset,
     resetField,
-    //   watch,
     formState: { errors },
   } = useForm<validateFields>({
     mode: 'onSubmit',
@@ -46,7 +45,6 @@ const Form = () => {
 
   const [fileName, setFileName] = useState<string>('');
   const [items, setItems] = useState<ItemType[]>([]);
-  // const watchFileField = watch('image');
 
   const onSubmit: SubmitHandler<validateFields> = (data) => {
     const newItem = {
@@ -89,11 +87,6 @@ const Form = () => {
     setFileName('');
     reset();
   }, [clearErrors, reset]);
-
-  // useEffect(() => {
-  //   const subscription = watch((value, { name, type }) => console.log(value, name, type));
-  //   return () => subscription.unsubscribe();
-  // }, [watch]);
 
   useEffect(() => {
     if (items.length) {
