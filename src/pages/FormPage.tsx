@@ -3,7 +3,7 @@ import Form from '../components/Form/Form';
 import { ItemType } from '../components/App/App';
 import List from '../components/List/List';
 
-const FormPage: FC<ItemType> = () => {
+const FormPage: FC = () => {
   const [items, setItems] = useState<ItemType[]>([]);
 
   const addItem = (newItem: ItemType) => {

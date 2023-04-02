@@ -86,13 +86,6 @@ const Form: FC<FormType> = ({ addItem }) => {
     reset();
   }, [clearErrors, reset]);
 
-  // useEffect(() => {
-  //   if (items.length) {
-  //     alert('Add new item!');
-  //     resetForm();
-  //   }
-  // }, [items, resetForm]);
-
   return (
     <>
       <form className={styles.form} onSubmit={handleSubmit(onSubmit)} data-testid="form-component">
