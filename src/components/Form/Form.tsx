@@ -72,13 +72,9 @@ const Form = () => {
     setFileName(files[0].name);
   };
 
-  const validateDate = ({ target }: BaseSyntheticEvent) => {
-    const { value } = target;
+  const validateDate = (value: string) => {
     if (new Date(value).getTime() <= new Date().getTime()) {
-      setError('published', {
-        type: 'custom',
-        message: 'Published date can not be later than today',
-      });
+      return 'Published date can not be later than today';
     }
   };
 
@@ -211,8 +207,7 @@ const Form = () => {
             errors={errors.published?.message}
             rules={{
               required: 'This field is required',
-              valueAsDate: true,
-              onChange: validateDate,
+              validate: validateDate,
             }}
           />
         </FieldSet>
