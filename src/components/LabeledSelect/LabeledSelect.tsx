@@ -4,7 +4,7 @@ import styles from '../Form/form.module.css';
 import { FormFieldsType, validateFields } from '../Form/Form';
 
 interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
-  register: UseFormRegister<validateFields>;
+  register?: UseFormRegister<validateFields>;
   name: FormFieldsType;
   label: string;
   options: { value: string; label: string }[];
