@@ -1,7 +1,6 @@
-import React, { BaseSyntheticEvent, useCallback, useEffect, useState } from 'react';
+import React, { BaseSyntheticEvent, FC, useCallback, useState } from 'react';
 import styles from './form.module.css';
 import UploadIco from '../../assets/images/upload-icon.svg';
-import List from '../List/List';
 import { v4 as uuidv4 } from 'uuid';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { ItemType } from '../App/App';
@@ -29,7 +28,11 @@ export type FormFieldsType =
   | 'delivery'
   | 'terms';
 
-const Form = () => {
+type FormType = {
+  addItem: (item: ItemType) => void;
+};
+
+const Form: FC<FormType> = ({ addItem }) => {
   const {
     register,
     handleSubmit,
@@ -43,9 +46,8 @@ const Form = () => {
   });
 
   const [fileName, setFileName] = useState<string>('');
-  const [items, setItems] = useState<ItemType[]>([]);
 
-  const onSubmit: SubmitHandler<validateFields> = (data) => {
+  const onSubmit: SubmitHandler<validateFields> = (data: validateFields) => {
     const newItem = {
       id: uuidv4(),
       title: data.title,
@@ -54,7 +56,9 @@ const Form = () => {
       delivery: data.delivery,
       status: data.status,
     };
-    setItems([newItem, ...items]);
+    resetForm();
+    addItem(newItem);
+    alert('Add new item!');
   };
 
   const validateFile = (files: FileList) => {
@@ -82,12 +86,12 @@ const Form = () => {
     reset();
   }, [clearErrors, reset]);
 
-  useEffect(() => {
-    if (items.length) {
-      alert('Add new item!');
-      resetForm();
-    }
-  }, [items, resetForm]);
+  // useEffect(() => {
+  //   if (items.length) {
+  //     alert('Add new item!');
+  //     resetForm();
+  //   }
+  // }, [items, resetForm]);
 
   return (
     <>
@@ -241,7 +245,6 @@ const Form = () => {
           </button>
         </fieldset>
       </form>
-      <List data={items} />
     </>
   );
 };
