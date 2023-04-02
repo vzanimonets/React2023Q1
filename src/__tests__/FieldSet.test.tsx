@@ -4,7 +4,7 @@ import { render, screen } from '@testing-library/react';
 import FieldSet from '../components/FieldSet/FieldSet';
 
 describe('FieldSet Component', () => {
-  it('testing render of the main page', () => {
+  it('testing render of the FieldSet component', () => {
     render(
       <FieldSet>
         <p>Test element</p>
