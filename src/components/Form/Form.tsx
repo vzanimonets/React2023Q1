@@ -34,7 +34,6 @@ const Form = () => {
     register,
     handleSubmit,
     clearErrors,
-    setError,
     reset,
     resetField,
     formState: { errors },
@@ -58,17 +57,16 @@ const Form = () => {
     setItems([newItem, ...items]);
   };
 
-  const changeFile = ({ target }: BaseSyntheticEvent) => {
-    const { files } = target;
+  const validateFile = (files: FileList) => {
     if (!files[0].type.startsWith('image/')) {
       resetField('image');
-      setError('image', {
-        type: 'custom',
-        message: 'Wrong type of the file',
-      });
-      return;
+      return 'Wrong type of the file';
     }
     clearErrors('image');
+  };
+
+  const changeFile = ({ target }: BaseSyntheticEvent) => {
+    const { files } = target;
     setFileName(files[0].name);
   };
 
@@ -138,6 +136,7 @@ const Form = () => {
             register={register}
             rules={{
               onChange: changeFile,
+              validate: validateFile,
               required: 'This field is required',
             }}
             errors={errors.image?.message}
