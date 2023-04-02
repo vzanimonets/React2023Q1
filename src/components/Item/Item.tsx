@@ -1,8 +1,6 @@
 import styles from './item.module.css';
 import React from 'react';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import { ReactComponent as LikeBtn } from '../../assets/images/like.svg';
+import LikeBtn from '../../assets/images/like.svg';
 
 type ItemPropsType = {
   id: string;
@@ -33,7 +31,7 @@ const Item = ({ title, description, image, status, delivery }: ItemPropsType) =>
         </div>
         <div className={styles.card__btns}>
           <button className={styles.btn}>Button</button>
-          <LikeBtn className={styles.icon__like} />
+          <img src={LikeBtn} className={styles.icon__like} alt="" />
           <span className={styles.like__count}>324</span>
         </div>
       </div>

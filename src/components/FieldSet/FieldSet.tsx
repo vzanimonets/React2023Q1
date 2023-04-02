@@ -9,7 +9,11 @@ interface FieldsetProps extends FieldsetHTMLAttributes<HTMLFieldSetElement> {
 
 const FieldSet: FC<FieldsetProps> = ({ errors, children, ...rest }) => {
   return (
-    <fieldset className={errors ? styles.hasError : ''} {...rest}>
+    <fieldset
+      data-testid={!errors ? 'form-error' : ''}
+      className={errors ? styles.hasError : ''}
+      {...rest}
+    >
       {children}
     </fieldset>
   );

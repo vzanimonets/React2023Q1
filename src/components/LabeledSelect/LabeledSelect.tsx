@@ -23,7 +23,7 @@ const LabeledSelect: FC<SelectProps> = ({
 }) => {
   return (
     <>
-      <label>{label}</label>
+      {label && <label htmlFor={rest?.id}>{label}</label>}
       <select {...(register && register(name, rules))} {...rest}>
         {options.map((option, i) => (
           <option value={option.value} key={`select_${option.value}_${i}`}>

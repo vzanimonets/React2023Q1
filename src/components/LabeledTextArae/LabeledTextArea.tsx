@@ -14,7 +14,7 @@ interface TextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
 const LabeledTextArea: FC<TextAreaProps> = ({ register, name, label, rules, errors, ...rest }) => {
   return (
     <>
-      <label>{label}</label>
+      {label && <label htmlFor={rest?.id}>{label}</label>}
       <textarea {...(register && register(name, rules))} {...rest} />
       {errors && <span className={styles.error__message}>{errors}</span>}
     </>

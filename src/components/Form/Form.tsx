@@ -1,6 +1,6 @@
 import React, { BaseSyntheticEvent, useCallback, useEffect, useState } from 'react';
 import styles from './form.module.css';
-import { ReactComponent as UploadIco } from '../../assets/images/upload-icon.svg';
+import UploadIco from '../../assets/images/upload-icon.svg';
 import List from '../List/List';
 import { v4 as uuidv4 } from 'uuid';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -104,13 +104,14 @@ const Form = () => {
 
   return (
     <>
-      <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
+      <form className={styles.form} onSubmit={handleSubmit(onSubmit)} data-testid="form-component">
         <FieldSet errors={errors.title?.message}>
           <LabeledInput
             label="Item Title"
             type="text"
             placeholder="Item title"
             name="title"
+            id="title"
             register={register}
             errors={errors.title?.message}
             rules={{
@@ -125,6 +126,7 @@ const Form = () => {
             name={'description'}
             label={'Item description'}
             cols={4}
+            id="description"
             placeholder="Item description"
             errors={errors.description?.message}
             rules={{
@@ -136,12 +138,13 @@ const Form = () => {
         <FieldSet errors={errors.image?.message}>
           <label htmlFor="file" className={styles.upload}>
             {fileName ? fileName : 'Upload image...'}
-            <UploadIco className={styles.upload__ico} />
+            <img className={styles.upload__ico} src={UploadIco} alt="" />
           </label>
           <LabeledInput
             type="file"
             name="image"
             id="file"
+            data-testid="form-upload"
             accept="image/*"
             register={register}
             rules={{
@@ -157,6 +160,7 @@ const Form = () => {
             defaultValue=""
             errors={errors.status?.message}
             name="status"
+            id="status"
             register={register}
             rules={{
               required: 'This field is required',
@@ -199,7 +203,9 @@ const Form = () => {
             />
           </div>
           {errors.delivery?.type === 'required' && (
-            <span className={styles.error__message}>This field is required.</span>
+            <span className={styles.error__message} data-testid="form-error">
+              This field is required.
+            </span>
           )}
         </FieldSet>
         <FieldSet errors={errors.published?.message}>
@@ -217,7 +223,7 @@ const Form = () => {
             }}
           />
         </FieldSet>
-        <FieldSet errors={errors.terms}>
+        <FieldSet errors={errors.terms?.type}>
           <label htmlFor="terms" className={styles.agreement__text}>
             I agree to the terms
           </label>
@@ -234,7 +240,9 @@ const Form = () => {
             />
           </span>
           {errors.terms?.type === 'required' && (
-            <span className={styles.error__message}>terms should be agreed.</span>
+            <span className={styles.error__message} data-testid="form-error">
+              terms should be agreed.
+            </span>
           )}
         </FieldSet>
         <fieldset>
