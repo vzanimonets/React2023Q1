@@ -4,7 +4,7 @@ import styles from '../Form/form.module.css';
 import { FormFieldsType, validateFields } from '../Form/Form';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
-  register: UseFormRegister<validateFields>;
+  register?: UseFormRegister<validateFields>;
   name: FormFieldsType;
   label?: string;
   rules?: RegisterOptions;
