@@ -1,261 +1,245 @@
-import React, { createRef, FormEvent } from 'react';
+import React, { BaseSyntheticEvent, FC, useCallback, useState } from 'react';
 import styles from './form.module.css';
-import { ReactComponent as UploadIco } from '../../assets/images/upload-icon.svg';
-import List from '../List/List';
+import UploadIco from '../../assets/images/upload-icon.svg';
 import { v4 as uuidv4 } from 'uuid';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { ItemType } from '../App/App';
+import LabeledInput from '../LabeledInput/LabeledInput';
+import FieldSet from '../FieldSet/FieldSet';
+import LabeledTextArea from '../LabeledTextArae/LabeledTextArea';
+import LabeledSelect from '../LabeledSelect/LabeledSelect';
 
-interface validateFields {
-  title: string | undefined;
-  description: string | undefined;
-  image: string | number | undefined;
-  published: string | undefined;
-  terms: boolean | undefined;
+export interface validateFields {
+  title: string;
+  description: string;
+  image: Array<Blob>;
+  published: string;
+  status: string;
+  delivery: string;
+  terms: boolean;
 }
 
-class Form extends React.Component {
-  state = {
-    items: [],
-    titleValid: false,
-    descriptionValid: false,
-    imageValid: false,
-    publishedValid: false,
-    termsValid: false,
-    formErrors: { title: '', description: '', image: '', published: '', terms: '' },
-    formValid: false,
+export type FormFieldsType =
+  | 'title'
+  | 'description'
+  | 'image'
+  | 'published'
+  | 'status'
+  | 'delivery'
+  | 'terms';
+
+type FormType = {
+  addItem: (item: ItemType) => void;
+};
+
+const Form: FC<FormType> = ({ addItem }) => {
+  const {
+    register,
+    handleSubmit,
+    clearErrors,
+    reset,
+    resetField,
+    formState: { errors },
+  } = useForm<validateFields>({
+    mode: 'onSubmit',
+    reValidateMode: 'onSubmit',
+  });
+
+  const [fileName, setFileName] = useState<string>('');
+
+  const onSubmit: SubmitHandler<validateFields> = (data: validateFields) => {
+    const newItem = {
+      id: uuidv4(),
+      title: data.title,
+      description: data.description,
+      image: URL.createObjectURL(data.image[0]),
+      delivery: data.delivery,
+      status: data.status,
+    };
+    resetForm();
+    addItem(newItem);
+    alert('Add new item!');
   };
-  private titleRef = createRef<HTMLInputElement>();
-  private descriptionRef = createRef<HTMLTextAreaElement>();
-  private imgRef = createRef<HTMLInputElement>();
-  private statusRef = createRef<HTMLSelectElement>();
-  private radio1Ref = createRef<HTMLInputElement>();
-  private radio2Ref = createRef<HTMLInputElement>();
-  private publishedRef = createRef<HTMLInputElement>();
-  private termsRef = createRef<HTMLInputElement>();
-  private formRef = createRef<HTMLFormElement>();
 
-  handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    this.validate({
-      title: this.titleRef.current?.value,
-      description: this.descriptionRef.current?.value,
-      image:
-        this.imgRef.current?.files?.length && URL.createObjectURL(this.imgRef.current.files[0]),
-      published: this.publishedRef.current?.value,
-      terms: this.termsRef.current?.checked,
-    });
-  };
-
-  errorClass(error: string) {
-    return error.length === 0 ? '' : styles.hasError;
-  }
-
-  validate(fields: validateFields) {
-    const fieldValidationErrors = this.state.formErrors;
-    let titleValid = this.state.titleValid;
-    let descriptionValid = this.state.descriptionValid;
-    let imageValid = this.state.imageValid;
-    let publishedValid = this.state.publishedValid;
-    let termsValid = this.state.termsValid;
-
-    for (const [key, value] of Object.entries(fields)) {
-      switch (key) {
-        case 'title':
-          titleValid = value.length > 3;
-          fieldValidationErrors.title = titleValid ? '' : 'title length should be > 3';
-          break;
-        case 'description':
-          descriptionValid = value.length > 20;
-          fieldValidationErrors.description = descriptionValid
-            ? ''
-            : 'description length should be > 20';
-          break;
-        case 'image':
-          imageValid = !!value;
-          fieldValidationErrors.image = imageValid ? '' : 'Image  is Required';
-          break;
-        case 'published':
-          publishedValid = new Date(value).getTime() <= Date.now();
-          fieldValidationErrors.published = publishedValid
-            ? ''
-            : 'Published date can not be later than today';
-          break;
-        case 'terms':
-          termsValid = !!value;
-          fieldValidationErrors.terms = imageValid ? '' : 'terms should be agreed';
-          break;
-      }
+  const validateFile = (files: FileList) => {
+    if (!files[0].type.startsWith('image/')) {
+      resetField('image');
+      return 'Wrong type of the file';
     }
-    this.setState(
-      {
-        ...this.state,
-        formErrors: fieldValidationErrors,
-        titleValid: titleValid,
-        descriptionValid: descriptionValid,
-        imageValid: imageValid,
-        publishedValid: publishedValid,
-        termsValid: termsValid,
-      },
-      this.validateForm
-    );
-  }
+    clearErrors('image');
+  };
 
-  validateForm() {
-    this.setState(
-      {
-        formValid:
-          this.state.titleValid &&
-          this.state.descriptionValid &&
-          this.state.imageValid &&
-          this.state.publishedValid &&
-          this.state.termsValid,
-      },
-      () => this.state.formValid && this.displayItems()
-    );
-  }
+  const changeFile = ({ target }: BaseSyntheticEvent) => {
+    const { files } = target;
+    setFileName(files[0].name);
+  };
 
-  displayItems() {
-    this.setState(
-      {
-        items: [
-          ...this.state.items,
-          {
-            id: uuidv4(),
-            title: this.titleRef.current?.value,
-            text: this.descriptionRef.current?.value,
-            image:
-              this.imgRef.current?.files?.length &&
-              URL.createObjectURL(this.imgRef.current.files[0]),
-            status: this.statusRef.current?.value,
-            radio: this.radio1Ref.current?.checked
-              ? this.radio1Ref.current?.value
-              : this.radio2Ref.current?.value,
-            published: this.publishedRef.current?.value,
-            terms: this.termsRef.current?.checked,
-          },
-        ],
-      },
-      () => this.formRef.current?.reset()
-    );
-  }
+  const validateDate = (value: string) => {
+    if (new Date(value).getTime() <= new Date().getTime()) {
+      return 'Published date can not be later than today';
+    }
+  };
 
-  render() {
-    return (
-      <>
-        <form className={styles.form} ref={this.formRef} onSubmit={this.handleSubmit}>
-          <fieldset className={this.errorClass(this.state.formErrors.title)}>
-            <label htmlFor="itemTitle">Item Title</label>
-            <input
-              type="text"
-              id="itemTitle"
-              name="itemTitle"
+  const resetForm = useCallback(() => {
+    clearErrors();
+    setFileName('');
+    reset();
+  }, [clearErrors, reset]);
+
+  return (
+    <>
+      <form className={styles.form} onSubmit={handleSubmit(onSubmit)} data-testid="form-component">
+        <FieldSet errors={errors.title?.message}>
+          <LabeledInput
+            label="Item Title"
+            type="text"
+            placeholder="Item title"
+            name="title"
+            id="title"
+            register={register}
+            errors={errors.title?.message}
+            rules={{
+              required: 'This field is required',
+              minLength: { value: 4, message: 'title length should be > 3' },
+            }}
+          />
+        </FieldSet>
+        <FieldSet errors={errors.description?.message}>
+          <LabeledTextArea
+            register={register}
+            name={'description'}
+            label={'Item description'}
+            cols={4}
+            id="description"
+            placeholder="Item description"
+            errors={errors.description?.message}
+            rules={{
+              required: 'This field is required',
+              minLength: { value: 21, message: 'title length should be > 20' },
+            }}
+          />
+        </FieldSet>
+        <FieldSet errors={errors.image?.message}>
+          <label htmlFor="file" className={styles.upload}>
+            {fileName ? fileName : 'Upload image...'}
+            <img className={styles.upload__ico} src={UploadIco} alt="" />
+          </label>
+          <LabeledInput
+            type="file"
+            name="image"
+            id="file"
+            data-testid="form-upload"
+            accept="image/*"
+            register={register}
+            rules={{
+              onChange: changeFile,
+              validate: validateFile,
+              required: 'This field is required',
+            }}
+            errors={errors.image?.message}
+          />
+        </FieldSet>
+        <FieldSet errors={errors.status?.message}>
+          <LabeledSelect
+            label="Status"
+            defaultValue=""
+            errors={errors.status?.message}
+            name="status"
+            id="status"
+            register={register}
+            rules={{
+              required: 'This field is required',
+            }}
+            options={[
+              { value: '', label: '--Select status--' },
+              { value: 'in stock', label: 'In stock' },
+              { value: 'waiting', label: 'Temporarily Out Of Stock' },
+            ]}
+          />
+        </FieldSet>
+        <FieldSet>
+          <label htmlFor="radio">Delivery:</label>
+          <div className={styles.radio__container} id="radio">
+            <LabeledInput
+              label="No"
+              type="radio"
+              id="radio1"
               placeholder="Item title"
-              defaultValue=""
-              ref={this.titleRef}
+              name="delivery"
+              defaultValue="No"
+              register={register}
+              errors={errors.delivery?.message}
+              rules={{
+                required: 'This field is required',
+              }}
             />
-            {this.state.formErrors.title ? (
-              <span className={styles.error__message}>{this.state.formErrors.title}</span>
-            ) : (
-              ''
-            )}
-          </fieldset>
-          <fieldset className={this.errorClass(this.state.formErrors.description)}>
-            <label htmlFor="description">Item description</label>
-            <textarea
-              name="description"
-              id="textArea"
-              cols={4}
-              placeholder="Item description"
-              ref={this.descriptionRef}
+            <LabeledInput
+              label="Yes"
+              type="radio"
+              id="radio2"
+              placeholder="Item title"
+              name="delivery"
+              defaultValue="No"
+              register={register}
+              errors={errors.delivery?.message}
+              rules={{
+                required: true,
+              }}
             />
-            {this.state.formErrors.description ? (
-              <span className={styles.error__message}>{this.state.formErrors.description}</span>
-            ) : (
-              ''
-            )}
-          </fieldset>
-          <fieldset className={this.errorClass(this.state.formErrors.image)}>
-            <label htmlFor="file" className={styles.upload}>
-              Upload image
-              <UploadIco className={styles.upload__ico} />
-            </label>
-            <input type="file" id="file" accept="image/*" ref={this.imgRef} />
-            {this.state.formErrors.image ? (
-              <span className={styles.error__message}>{this.state.formErrors.image}</span>
-            ) : (
-              ''
-            )}
-          </fieldset>
-          <fieldset>
-            <label htmlFor="selectBox">Status</label>
-            <select name="selectBox" id="selectBox" defaultValue="waiting" ref={this.statusRef}>
-              <option value="in">In stock</option>
-              <option value="waiting">Temporarily Out Of Stock</option>
-            </select>
-          </fieldset>
-          <fieldset>
-            <label htmlFor="radio">Delivery:</label>
-            <div className={styles.radio__container} id="radio">
-              <label htmlFor="radio1">Yes</label>
-              <input
-                type="radio"
-                name="delivery"
-                id="radio1"
-                defaultValue="Yes"
-                defaultChecked
-                ref={this.radio1Ref}
-              />
-              <label htmlFor="radio2">No</label>
-              <input
-                type="radio"
-                name="delivery"
-                id="radio2"
-                defaultValue="No"
-                ref={this.radio2Ref}
-              />
-            </div>
-          </fieldset>
-          <fieldset className={this.errorClass(this.state.formErrors.published)}>
-            <label htmlFor="publish">Published:</label>
-            <input
-              type="date"
-              id="publish"
-              ref={this.publishedRef}
-              defaultValue={new Date().toISOString().slice(0, 10)}
-              className={this.errorClass(this.state.formErrors.published)}
-            />
-            {this.state.formErrors.published ? (
-              <span className={styles.error__message}>{this.state.formErrors.published}</span>
-            ) : (
-              ''
-            )}
-          </fieldset>
-          <fieldset className={this.errorClass(this.state.formErrors.terms)}>
-            <label htmlFor="terms" className={styles.agreement__text}>
-              I agree to the terms
-            </label>
-            <span className={styles.agreement__checkbox__wrapper}>
-              <input type="checkbox" id="terms" ref={this.termsRef} />
+          </div>
+          {errors.delivery?.type === 'required' && (
+            <span className={styles.error__message} data-testid="form-error">
+              This field is required.
             </span>
-            {this.state.formErrors.terms ? (
-              <span className={styles.error__message}>{this.state.formErrors.terms}</span>
-            ) : (
-              ''
-            )}
-          </fieldset>
-          <fieldset>
-            <button className={styles.btn} type="submit">
-              Send
-            </button>
-            <button className={styles.btn} type="reset">
-              Reset
-            </button>
-          </fieldset>
-        </form>
-        <List data={this.state.items} />
-      </>
-    );
-  }
-}
+          )}
+        </FieldSet>
+        <FieldSet errors={errors.published?.message}>
+          <LabeledInput
+            type="date"
+            id="publish"
+            name="published"
+            label="Published"
+            register={register}
+            errors={errors.published?.message}
+            rules={{
+              required: 'This field is required',
+              validate: validateDate,
+            }}
+          />
+        </FieldSet>
+        <FieldSet errors={errors.terms?.type}>
+          <label htmlFor="terms" className={styles.agreement__text}>
+            I agree to the terms
+          </label>
+          <span className={styles.agreement__checkbox__wrapper}>
+            <LabeledInput
+              type="checkbox"
+              id="terms"
+              errors={errors.terms?.message}
+              register={register}
+              name="terms"
+              rules={{
+                required: true,
+              }}
+            />
+          </span>
+          {errors.terms?.type === 'required' && (
+            <span className={styles.error__message} data-testid="form-error">
+              terms should be agreed.
+            </span>
+          )}
+        </FieldSet>
+        <fieldset>
+          <button className={styles.btn} type="submit">
+            Send
+          </button>
+          <button className={styles.btn} type="reset" onClick={resetForm}>
+            Reset
+          </button>
+        </fieldset>
+      </form>
+    </>
+  );
+};
 
 export default Form;

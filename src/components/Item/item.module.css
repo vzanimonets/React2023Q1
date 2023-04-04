@@ -88,6 +88,7 @@ img {
     font-weight: 300;
     letter-spacing: 2px;
     text-transform: uppercase;
+    word-wrap: break-word;
 }
 
 .card__text {
@@ -96,6 +97,7 @@ img {
     line-height: 1.5;
     margin-bottom: 1.25rem;
     text-align: left;
+    word-wrap: break-word;
 }
 .card__btns{
     display: flex;

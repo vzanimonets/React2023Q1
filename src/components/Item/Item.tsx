@@ -1,19 +1,17 @@
 import styles from './item.module.css';
 import React from 'react';
-import { ReactComponent as LikeBtn } from '../../assets/images/like.svg';
+import LikeBtn from '../../assets/images/like.svg';
 
 type ItemPropsType = {
   id: string;
   title: string;
-  text: string;
+  description: string;
   image: string;
-  status?: string | undefined;
-  radio?: string | undefined;
+  status: string;
+  delivery: string;
 };
-/*
-TODO: fix styles
- */
-const Item = ({ title, text, image, status, radio }: ItemPropsType) => {
+
+const Item = ({ title, description, image, status, delivery }: ItemPropsType) => {
   const bgStyle = {
     backgroundImage: `url(${image})`,
   };
@@ -22,18 +20,18 @@ const Item = ({ title, text, image, status, radio }: ItemPropsType) => {
       <div className={styles.card__image} style={bgStyle}></div>
       <div className={styles.card__content}>
         <div className={styles.card__title}>{title}</div>
-        <div className={styles.card__text}>{text}</div>
+        <div className={styles.card__text}>{description}</div>
         <div>
-          <label>Status:</label>
+          <label>Status: </label>
           <i>{status}</i>
         </div>
         <div>
-          <label>Delivery:</label>
-          <i>{radio}</i>
+          <label>Delivery: </label>
+          <i>{delivery}</i>
         </div>
         <div className={styles.card__btns}>
           <button className={styles.btn}>Button</button>
-          <LikeBtn className={styles.icon__like} />
+          <img src={LikeBtn} className={styles.icon__like} alt="" />
           <span className={styles.like__count}>324</span>
         </div>
       </div>

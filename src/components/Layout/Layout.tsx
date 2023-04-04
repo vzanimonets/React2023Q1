@@ -1,10 +1,10 @@
 import React from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import Navigation from '../Navigation/Navigation';
 import Header from '../Header/Header';
-import withRouter from '../HOC/withRouter';
 
 const Layout = () => {
+  const location = useLocation();
   const getTitle = () => {
     switch (location.pathname) {
       case '/':
@@ -28,4 +28,4 @@ const Layout = () => {
     </>
   );
 };
-export default withRouter(Layout);
+export default Layout;

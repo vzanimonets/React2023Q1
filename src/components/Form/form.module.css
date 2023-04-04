@@ -140,6 +140,6 @@
     color: rgba(255, 0, 0);;
 }
 
-.hasError input[type="text"],.hasError textarea, .hasError .upload, .hasError input[type="date"], .hasError .agreement__checkbox__wrapper{
+.hasError input[type="text"],.hasError textarea, .hasError .upload, .hasError input[type="date"], .hasError .agreement__checkbox__wrapper, .hasError select{
     border-color: rgba(255, 0, 0);
 }
