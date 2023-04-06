@@ -7,7 +7,7 @@ import React from 'react';
 
 describe('Form', () => {
   it('submits the form when all fields are filled correctly', () => {
-    const form = render(<Form />);
+    const form = render(<Form addItem={() => {}} />);
     const nameInput = form.getByLabelText('Item Title');
     const descriptionTextarea = form.getByLabelText('Item description');
     const statusInput = form.getByLabelText('Status');
