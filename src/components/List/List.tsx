@@ -1,7 +1,7 @@
 import styles from './list.module.css';
 import React, { FC } from 'react';
 import { ShotInfoType } from '../App/App';
-import Card from '../Card/Card';
+import Item from '../Item/Item';
 import Spinner from '../Spinner/Spinner';
 
 type PropsType = {
@@ -20,7 +20,7 @@ const List: FC<PropsType> = ({ data, isLoading, onClick }) => {
           {data.map((item) => {
             return (
               <li className={styles.cards__item} key={item.id}>
-                <Card {...item} onClick={onClick} />
+                <Item {...item} onClick={onClick} />
               </li>
             );
           })}

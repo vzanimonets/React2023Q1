@@ -17,10 +17,15 @@ export type ItemType = {
 };
 export type ShotInfoType = {
   id: string;
-  firstName: string;
-  lastName: string;
-  age: number;
+  title?: string;
+  firstName?: string;
+  lastName?: string;
+  age?: number;
+  description?: string;
   image: string;
+  status?: string;
+  delivery?: string;
+  onClick?: () => void;
 };
 
 export type RequestType = {

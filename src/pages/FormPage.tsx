@@ -1,10 +1,10 @@
 import React, { FC, useState } from 'react';
 import Form from '../components/Form/Form';
-import { ItemType } from '../components/App/App';
+import { ItemType, ShotInfoType } from '../components/App/App';
 import List from '../components/List/List';
 
 const FormPage: FC = () => {
-  const [items, setItems] = useState<ItemType[]>([]);
+  const [items, setItems] = useState<ShotInfoType[]>([]);
 
   const addItem = (newItem: ItemType) => {
     setItems([newItem, ...items]);
@@ -12,7 +12,7 @@ const FormPage: FC = () => {
   return (
     <>
       <Form addItem={addItem} />;
-      <List data={items} />
+      <List data={items} isLoading={false} onClick={() => {}} />
     </>
   );
 };
