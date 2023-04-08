@@ -1,16 +1,15 @@
 import styles from './list.module.css';
 import React, { FC } from 'react';
 import { ShotInfoType } from '../App/App';
-import Item from '../Item/Item';
 import Spinner from '../Spinner/Spinner';
+import Card from '../Card/Card';
 
 type PropsType = {
   data: ShotInfoType[];
   isLoading: boolean;
-  onClick: () => void;
 };
 
-const List: FC<PropsType> = ({ data, isLoading, onClick }) => {
+const List: FC<PropsType> = ({ data, isLoading }) => {
   return (
     <>
       {isLoading ? (
@@ -20,7 +19,7 @@ const List: FC<PropsType> = ({ data, isLoading, onClick }) => {
           {data.map((item) => {
             return (
               <li className={styles.cards__item} key={item.id}>
-                <Item {...item} onClick={onClick} />
+                <Card {...item} />
               </li>
             );
           })}

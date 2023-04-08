@@ -30,10 +30,9 @@ const DetailsModal: FC<ModalPropsType> = ({ id, isOpen, onClose /*isLoading*/ })
       setIsLoading(false);
       setData(data);
     });
-  }, []);
+  }, [id]);
 
   if (!isOpen) return null;
-  //if (isLoading) return <Spinner />;
 
   return (
     <div onClick={onClose} className={styles.overlay}>
