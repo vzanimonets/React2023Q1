@@ -1,6 +1,6 @@
 import { api } from './configs/axiosConfigs';
 import { RequestType } from '../components/App/App';
-import { DetailsType } from '../components/Modal/DetailsModal';
+import { DetailsType } from '../components/DetailsModal/DetailsModal';
 
 export const DataAPI = {
   getAll: async ({ limit = 9, fields = '' }): Promise<RequestType> => {
