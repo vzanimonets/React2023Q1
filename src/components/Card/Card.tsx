@@ -10,7 +10,6 @@ type CardPropsType = {
   lastName: string;
   age: number;
   image: string;
-  onClick: () => void;
 };
 
 const Card = ({ id, firstName, lastName, image, age }: CardPropsType) => {
