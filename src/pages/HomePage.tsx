@@ -18,9 +18,18 @@ const HomePage: FC = () => {
     })();
   }, []);
 
+  const handleSearch = (query: string | undefined) => {
+    const params = { query, fields: 'firstName,lastName,age,image' };
+    setIsLoading(true);
+    DataAPI.findAll(params).then((data) => {
+      setIsLoading(false);
+      setItems([...data.users]);
+    });
+  };
+
   return (
     <>
-      <SearchBar />
+      <SearchBar onSubmit={handleSearch} />
 
       <>
         <List data={items} isLoading={isLoading} />

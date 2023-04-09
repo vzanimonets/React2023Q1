@@ -26,8 +26,9 @@ export type ShotInfoType = {
 
 export type RequestType = {
   users: ShotInfoType[];
-  fields?: string | undefined;
-  limit?: number;
+  q: string;
+  fields: string;
+  limit: number;
 };
 
 function App() {
