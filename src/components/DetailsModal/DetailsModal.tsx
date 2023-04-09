@@ -12,6 +12,7 @@ export type DetailsType = {
   firstName: string;
   lastName: string;
   maidenName: string;
+  image: string;
   age: number;
   email: string;
   phone: string;
@@ -54,52 +55,55 @@ const DetailsModal: FC<ModalPropsType> = ({ id, isOpen, onClose }) => {
             {isLoading ? (
               <Spinner />
             ) : (
-              <>
-                <div className={styles.row}>
-                  <span>first name:</span>
-                  <span>{data?.firstName}</span>
+              <div className={styles.content__inner}>
+                <img src={data?.image} alt={data?.username} />
+                <div className={styles.content_inner__data}>
+                  <div className={styles.row}>
+                    <span>first name:</span>
+                    <span>{data?.firstName}</span>
+                  </div>
+                  <div className={styles.row}>
+                    <span>last name:</span>
+                    <span>{data?.lastName}</span>
+                  </div>
+                  <div className={styles.row}>
+                    <span>maiden name:</span>
+                    <span>{data?.maidenName}</span>
+                  </div>
+                  <div className={styles.row}>
+                    <span>age:</span>
+                    <span>{data?.age}</span>
+                  </div>
+                  <div className={styles.row}>
+                    <span>email:</span>
+                    <span>{data?.email}</span>
+                  </div>
+                  <div className={styles.row}>
+                    <span>phone:</span>
+                    <span>{data?.phone}</span>
+                  </div>
+                  <div className={styles.row}>
+                    <span>username:</span>
+                    <span>{data?.username}</span>
+                  </div>
+                  <div className={styles.row}>
+                    <span>birthday:</span>
+                    <span>{data && new Date(data.birthDate).toLocaleDateString()}</span>
+                  </div>
+                  <div className={styles.row}>
+                    <span>height:</span>
+                    <span>{data?.height}</span>
+                  </div>
+                  <div className={styles.row}>
+                    <span>weight:</span>
+                    <span>{data?.weight}</span>
+                  </div>
+                  <div className={styles.row}>
+                    <span>eye color:</span>
+                    <span>{data?.eyeColor}</span>
+                  </div>
                 </div>
-                <div className={styles.row}>
-                  <span>last name:</span>
-                  <span>{data?.lastName}</span>
-                </div>
-                <div className={styles.row}>
-                  <span>maiden name:</span>
-                  <span>{data?.maidenName}</span>
-                </div>
-                <div className={styles.row}>
-                  <span>age:</span>
-                  <span>{data?.age}</span>
-                </div>
-                <div className={styles.row}>
-                  <span>email:</span>
-                  <span>{data?.email}</span>
-                </div>
-                <div className={styles.row}>
-                  <span>phone:</span>
-                  <span>{data?.phone}</span>
-                </div>
-                <div className={styles.row}>
-                  <span>username:</span>
-                  <span>{data?.username}</span>
-                </div>
-                <div className={styles.row}>
-                  <span>birthday:</span>
-                  <span>{data && new Date(data.birthDate).toLocaleDateString()}</span>
-                </div>
-                <div className={styles.row}>
-                  <span>height:</span>
-                  <span>{data?.height}</span>
-                </div>
-                <div className={styles.row}>
-                  <span>weight:</span>
-                  <span>{data?.weight}</span>
-                </div>
-                <div className={styles.row}>
-                  <span>eye color:</span>
-                  <span>{data?.eyeColor}</span>
-                </div>
-              </>
+              </div>
             )}
           </div>
         </div>
