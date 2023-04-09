@@ -14,7 +14,7 @@ const List: FC<PropsType> = ({ data, isLoading }) => {
     <>
       {isLoading ? (
         <Spinner />
-      ) : (
+      ) : data.length ? (
         <ul className={styles.cards}>
           {data.map((item) => {
             return (
@@ -24,6 +24,8 @@ const List: FC<PropsType> = ({ data, isLoading }) => {
             );
           })}
         </ul>
+      ) : (
+        <p>No exact matches found!</p>
       )}
     </>
   );
