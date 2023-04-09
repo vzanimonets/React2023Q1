@@ -4,7 +4,7 @@ import React from 'react';
 
 describe('App', () => {
   it('should have input with placeholder Search...', () => {
-    render(<SearchBar />);
+    render(<SearchBar onSubmit={() => {}} />);
     expect(screen.getByPlaceholderText(/Search.../i)).toBeInTheDocument();
   });
 });
