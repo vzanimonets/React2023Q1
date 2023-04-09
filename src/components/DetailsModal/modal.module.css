@@ -7,8 +7,6 @@
     padding: 12px 24px;
 }
 
-
-/* Modal */
 .overlay {
     background-color: rgba(0, 0, 0, 0.3);
     position: fixed;
@@ -41,7 +39,6 @@ img {
 .modalRight {
     width: 100%;
 }
-
 
 .close {
     position: absolute;
@@ -82,29 +79,40 @@ img {
     padding: 1rem 2rem;
 }
 
-.btnContainer {
+.title {
+    padding-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: #696969
+}
+
+.row {
     display: flex;
-    padding: 1rem 1rem;
 }
 
-.btnContainer button {
-    width: 100%;
-    margin: .5rem;
-    padding: 16px 0;
-    /* border: none; */
-    border: 1px solid #411b57;
-    /* color: #ffffff; */
+.row > * {
+    flex: 1;
 }
 
-.btnPrimary {
-    background-color: #411b57;
-    color: white;
+.row > :first-child {
+    padding-bottom: 1rem;
+    padding-right: 1rem;
+    letter-spacing: 2px;
+    font-size: 1.25rem;
+    font-weight: 400;
+    text-align: right;
 }
 
-.btnOutline {
-    /* background-color: #a76a99; */
-    background-color: white;
-    color: #411b57;
+.row > :last-child {
+    padding-bottom: 1rem;
+    letter-spacing: 2px;
+    font-size: 1.25rem;
+    font-weight: 300;
+    text-align: left;
+    color: #696969;
+    font-style: italic;
 }
 
 .bold {

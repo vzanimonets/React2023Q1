@@ -16,7 +16,7 @@ export type DetailsType = {
   email: string;
   phone: string;
   username: string;
-  birthday: string;
+  birthDate: string;
   height: string;
   weight: string;
   eyeColor: string;
@@ -36,7 +36,6 @@ const DetailsModal: FC<ModalPropsType> = ({ id, isOpen, onClose }) => {
   }, [id]);
 
   if (!isOpen) return null;
-
   return (
     <div onClick={onClose} className={styles.overlay}>
       <div
@@ -56,17 +55,50 @@ const DetailsModal: FC<ModalPropsType> = ({ id, isOpen, onClose }) => {
               <Spinner />
             ) : (
               <>
-                <span>first name: {data?.firstName}</span>
-                <span>last name: {data?.lastName}</span>
-                <span>maiden name: {data?.maidenName}</span>
-                <span>age: {data?.age}</span>
-                <span>email: {data?.email}</span>
-                <span>phone: {data?.phone}</span>
-                <span>username: {data?.username}</span>
-                <span>birthday: {data?.birthday}</span>
-                <span>height: {data?.height}</span>
-                <span>weight: {data?.weight}</span>
-                <span>eye color: {data?.eyeColor}</span>
+                <div className={styles.row}>
+                  <span>first name:</span>
+                  <span>{data?.firstName}</span>
+                </div>
+                <div className={styles.row}>
+                  <span>last name:</span>
+                  <span>{data?.lastName}</span>
+                </div>
+                <div className={styles.row}>
+                  <span>maiden name:</span>
+                  <span>{data?.maidenName}</span>
+                </div>
+                <div className={styles.row}>
+                  <span>age:</span>
+                  <span>{data?.age}</span>
+                </div>
+                <div className={styles.row}>
+                  <span>email:</span>
+                  <span>{data?.email}</span>
+                </div>
+                <div className={styles.row}>
+                  <span>phone:</span>
+                  <span>{data?.phone}</span>
+                </div>
+                <div className={styles.row}>
+                  <span>username:</span>
+                  <span>{data?.username}</span>
+                </div>
+                <div className={styles.row}>
+                  <span>birthday:</span>
+                  <span>{data && new Date(data.birthDate).toLocaleDateString()}</span>
+                </div>
+                <div className={styles.row}>
+                  <span>height:</span>
+                  <span>{data?.height}</span>
+                </div>
+                <div className={styles.row}>
+                  <span>weight:</span>
+                  <span>{data?.weight}</span>
+                </div>
+                <div className={styles.row}>
+                  <span>eye color:</span>
+                  <span>{data?.eyeColor}</span>
+                </div>
               </>
             )}
           </div>
