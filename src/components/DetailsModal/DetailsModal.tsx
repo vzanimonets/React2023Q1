@@ -22,14 +22,17 @@ export type DetailsType = {
   eyeColor: string;
 };
 
-const DetailsModal: FC<ModalPropsType> = ({ id, isOpen, onClose /*isLoading*/ }) => {
+const DetailsModal: FC<ModalPropsType> = ({ id, isOpen, onClose }) => {
   const [data, setData] = useState<DetailsType>();
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
-    DataAPI.getOne(id).then((data) => {
+    try {
+      DataAPI.getOne(id).then((data) => {
+        setData(data);
+      });
+    } finally {
       setIsLoading(false);
-      setData(data);
-    });
+    }
   }, [id]);
 
   if (!isOpen) return null;
@@ -48,7 +51,7 @@ const DetailsModal: FC<ModalPropsType> = ({ id, isOpen, onClose /*isLoading*/ })
             X
           </span>
           <div className={styles.content}>
-            <span className={styles.title}>Details information{id}</span>
+            <span className={styles.title}>Details information</span>
             {isLoading ? (
               <Spinner />
             ) : (

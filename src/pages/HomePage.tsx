@@ -9,22 +9,27 @@ const HomePage: FC = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    (async () => {
+    try {
       const params = { fields: 'firstName,lastName,age,image' };
       setIsLoading(true);
-      const data = await DataAPI.getAll(params);
+      DataAPI.getAll(params).then((data) => {
+        setItems((prevState) => [...prevState, ...data.users]);
+      });
+    } finally {
       setIsLoading(false);
-      setItems((prevState) => [...prevState, ...data.users]);
-    })();
+    }
   }, []);
 
   const handleSearch = (query: string | undefined) => {
-    const params = { query, fields: 'firstName,lastName,age,image' };
-    setIsLoading(true);
-    DataAPI.findAll(params).then((data) => {
+    try {
+      const params = { query, fields: 'firstName,lastName,age,image' };
+      setIsLoading(true);
+      DataAPI.findAll(params).then((data) => {
+        setItems([...data.users]);
+      });
+    } finally {
       setIsLoading(false);
-      setItems([...data.users]);
-    });
+    }
   };
 
   return (
