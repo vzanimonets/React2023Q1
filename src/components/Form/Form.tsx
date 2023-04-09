@@ -230,10 +230,10 @@ const Form: FC<FormType> = ({ addItem }) => {
           )}
         </FieldSet>
         <fieldset>
-          <button className={styles.btn} type="submit">
+          <button className={styles.btn} type="submit" data-testid="submit">
             Send
           </button>
-          <button className={styles.btn} type="reset" onClick={resetForm}>
+          <button className={styles.btn} type="reset" onClick={resetForm} data-testid="reset">
             Reset
           </button>
         </fieldset>
