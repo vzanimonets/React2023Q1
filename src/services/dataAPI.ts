@@ -19,4 +19,15 @@ export const DataAPI = {
     });
     return res.data;
   },
+  findAll: async ({ query = '', limit = 9, fields = '' }): Promise<RequestType> => {
+    const res = await api.request({
+      url: `/users/search`,
+      params: {
+        q: query,
+        select: fields,
+        limit: limit,
+      },
+    });
+    return res.data;
+  },
 };
