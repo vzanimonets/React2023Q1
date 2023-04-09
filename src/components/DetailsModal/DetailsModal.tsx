@@ -11,7 +11,7 @@ type ModalPropsType = {
 export type DetailsType = {
   firstName: string;
   lastName: string;
-  middleName: string;
+  maidenName: string;
   age: number;
   email: string;
   phone: string;
@@ -55,7 +55,7 @@ const DetailsModal: FC<ModalPropsType> = ({ id, isOpen, onClose /*isLoading*/ })
               <>
                 <span>first name: {data?.firstName}</span>
                 <span>last name: {data?.lastName}</span>
-                <span>middle name: {data?.middleName}</span>
+                <span>maiden name: {data?.maidenName}</span>
                 <span>age: {data?.age}</span>
                 <span>email: {data?.email}</span>
                 <span>phone: {data?.phone}</span>
