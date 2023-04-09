@@ -1,4 +1,5 @@
 import React, { FC, useState } from 'react';
+import { ToastProvider } from 'react-toast-notifications';
 import Form from '../components/Form/Form';
 import { ItemType } from '../components/App/App';
 import styles from '../components/List/list.module.css';
@@ -12,7 +13,9 @@ const FormPage: FC = () => {
   };
   return (
     <>
-      <Form addItem={addItem} />
+      <ToastProvider>
+        <Form addItem={addItem} />
+      </ToastProvider>
       <ul className={styles.cards}>
         {items.map((item) => {
           return (

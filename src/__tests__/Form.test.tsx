@@ -3,10 +3,15 @@ import { describe, it } from 'vitest';
 import { fireEvent } from '@testing-library/dom';
 import Form from '../components/Form/Form';
 import React from 'react';
+import { ToastProvider } from 'react-toast-notifications';
 
 describe('Form', () => {
   it('submits the form when all fields are filled correctly', () => {
-    const form = render(<Form addItem={() => {}} />);
+    const form = render(
+      <ToastProvider>
+        <Form addItem={() => {}} />
+      </ToastProvider>
+    );
     const nameInput = form.getByLabelText('Item Title');
     const descriptionTextarea = form.getByLabelText('Item description');
     const statusInput = form.getByLabelText('Status');
@@ -27,14 +32,22 @@ describe('Form', () => {
     fireEvent.click(submit);
   });
   it('radio Delivery', () => {
-    const form = render(<Form addItem={() => {}} />);
+    const form = render(
+      <ToastProvider>
+        <Form addItem={() => {}} />
+      </ToastProvider>
+    );
     const radio = form.getByLabelText('No');
     expect(radio).toBeInTheDocument();
     fireEvent.click(radio);
     expect(radio).toBeChecked();
   });
   it('select', () => {
-    const form = render(<Form addItem={() => {}} />);
+    const form = render(
+      <ToastProvider>
+        <Form addItem={() => {}} />
+      </ToastProvider>
+    );
     const select = form.getByLabelText('Status');
     expect(select).toBeInTheDocument();
     fireEvent.change(select, { target: { value: 'in stock' } });
@@ -42,7 +55,11 @@ describe('Form', () => {
   });
 
   it('reset form', () => {
-    const form = render(<Form addItem={() => {}} />);
+    const form = render(
+      <ToastProvider>
+        <Form addItem={() => {}} />
+      </ToastProvider>
+    );
     const reset = form.getByTestId('reset');
     const select = form.getByLabelText('Status');
     fireEvent.change(select, { target: { value: 'in stock' } });

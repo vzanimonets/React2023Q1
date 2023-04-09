@@ -3,12 +3,15 @@ import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
 import App from '../components/App/App';
+import { ToastProvider } from 'react-toast-notifications';
 
 describe('Routes Component', () => {
   it('testing render of the main page', () => {
     render(
       <MemoryRouter initialEntries={['/']}>
-        <App />
+        <ToastProvider>
+          <App />
+        </ToastProvider>
       </MemoryRouter>
     );
 
@@ -19,7 +22,9 @@ describe('Routes Component', () => {
   it('testing render of the about page', () => {
     render(
       <MemoryRouter initialEntries={['/about']}>
-        <App />
+        <ToastProvider>
+          <App />
+        </ToastProvider>
       </MemoryRouter>
     );
 
@@ -30,7 +35,9 @@ describe('Routes Component', () => {
   it('testing render of the error page', () => {
     render(
       <MemoryRouter initialEntries={['/random']}>
-        <App />
+        <ToastProvider>
+          <App />
+        </ToastProvider>
       </MemoryRouter>
     );
 
@@ -40,7 +47,9 @@ describe('Routes Component', () => {
   it('testing render of the form page', () => {
     render(
       <MemoryRouter initialEntries={['/forms']}>
-        <App />
+        <ToastProvider>
+          <App />
+        </ToastProvider>
       </MemoryRouter>
     );
 

@@ -29,6 +29,7 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.43.8",
     "react-router-dom": "6",
+    "react-toast-notifications": "^2.5.1",
     "vite-plugin-svgr": "^2.4.0"
   },
   "devDependencies": {

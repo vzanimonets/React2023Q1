@@ -8,6 +8,7 @@ import LabeledInput from '../LabeledInput/LabeledInput';
 import FieldSet from '../FieldSet/FieldSet';
 import LabeledTextArea from '../LabeledTextArae/LabeledTextArea';
 import LabeledSelect from '../LabeledSelect/LabeledSelect';
+import { useToasts } from 'react-toast-notifications';
 
 export interface validateFields {
   title: string;
@@ -46,6 +47,7 @@ const Form: FC<FormType> = ({ addItem }) => {
   });
 
   const [fileName, setFileName] = useState<string>('');
+  const { addToast } = useToasts();
 
   const onSubmit: SubmitHandler<validateFields> = (data: validateFields) => {
     const newItem = {
@@ -58,7 +60,10 @@ const Form: FC<FormType> = ({ addItem }) => {
     };
     resetForm();
     addItem(newItem);
-    alert('Add new item!');
+    addToast('Add new item!', {
+      appearance: 'success',
+      autoDismiss: true,
+    });
   };
 
   const validateFile = (files: FileList) => {

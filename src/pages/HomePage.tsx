@@ -3,10 +3,12 @@ import SearchBar from '../components/SearchBar/SearchBar';
 import List from '../components/List/List';
 import { ShotInfoType } from '../components/App/App';
 import { DataAPI } from '../services/dataAPI';
+import { useToasts } from 'react-toast-notifications';
 
 const HomePage: FC = () => {
   const [items, setItems] = useState<ShotInfoType[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const { addToast } = useToasts();
 
   useEffect(() => {
     try {
@@ -15,10 +17,15 @@ const HomePage: FC = () => {
       DataAPI.getAll(params).then((data) => {
         setItems((prevState) => [...prevState, ...data.users]);
       });
+    } catch (e) {
+      addToast('Request is failed!', {
+        appearance: 'error',
+        autoDismiss: true,
+      });
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [addToast]);
 
   const handleSearch = (query: string | undefined) => {
     try {
@@ -26,6 +33,11 @@ const HomePage: FC = () => {
       setIsLoading(true);
       DataAPI.findAll(params).then((data) => {
         setItems([...data.users]);
+      });
+    } catch (e) {
+      addToast('Request is failed!', {
+        appearance: 'error',
+        autoDismiss: true,
       });
     } finally {
       setIsLoading(false);
