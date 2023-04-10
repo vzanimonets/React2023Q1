@@ -10,11 +10,10 @@ type PropsType = {
 };
 
 const List: FC<PropsType> = ({ data, isLoading }) => {
+  if (isLoading) return <Spinner />;
   return (
     <>
-      {isLoading ? (
-        <Spinner />
-      ) : data.length ? (
+      {data.length ? (
         <ul className={styles.cards}>
           {data.map((item) => {
             return (

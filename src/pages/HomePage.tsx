@@ -11,21 +11,13 @@ const HomePage: FC = () => {
   const { addToast } = useToasts();
 
   useEffect(() => {
-    try {
-      const params = { fields: 'firstName,lastName,age,image' };
-      setIsLoading(true);
-      DataAPI.getAll(params).then((data) => {
-        setItems((prevState) => [...prevState, ...data.users]);
-      });
-    } catch (e) {
-      addToast('Request is failed!', {
-        appearance: 'error',
-        autoDismiss: true,
-      });
-    } finally {
+    const params = { fields: 'firstName,lastName,age,image' };
+    setIsLoading(true);
+    DataAPI.getAll(params).then((data) => {
+      setItems((prevState) => [...prevState, ...data.users]);
       setIsLoading(false);
-    }
-  }, [addToast]);
+    });
+  }, []);
 
   const handleSearch = (query: string | undefined) => {
     try {
