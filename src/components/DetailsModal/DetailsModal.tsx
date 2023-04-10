@@ -45,7 +45,7 @@ const DetailsModal: FC<ModalPropsType> = ({ id, isOpen, onClose }) => {
 
   if (!isOpen) return null;
   return (
-    <div onClick={onClose} className={styles.overlay}>
+    <div onClick={onClose} data-testid="overlay" className={styles.overlay}>
       <div
         onClick={(e) => {
           e.stopPropagation();

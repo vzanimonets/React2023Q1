@@ -20,7 +20,7 @@ const SearchBar: FC<SearchBarPropType> = ({ onSubmit }) => {
       const value = JSON.stringify(valueRef.current?.value);
       localStorage.setItem('searchVal', value);
     };
-  }, []);
+  }, [onSubmit]);
 
   return (
     <div className={styles.searchBox}>

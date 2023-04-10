@@ -12,9 +12,11 @@ describe('Form', () => {
         id="customId"
         name="description"
         label="Some label"
+        errors="some error"
       />
     );
     expect(await screen.getByTestId('test-textarea')).toBeInTheDocument();
     expect(await screen.getByLabelText('Some label')).toBeInTheDocument();
+    expect(await screen.getByText('some error')).toBeInTheDocument();
   });
 });

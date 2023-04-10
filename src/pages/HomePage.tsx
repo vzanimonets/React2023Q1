@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useCallback, useState } from 'react';
 import SearchBar from '../components/SearchBar/SearchBar';
 import List from '../components/List/List';
 import { ShotInfoType } from '../components/App/App';
@@ -10,31 +10,25 @@ const HomePage: FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { addToast } = useToasts();
 
-  useEffect(() => {
-    const params = { fields: 'firstName,lastName,age,image' };
-    setIsLoading(true);
-    DataAPI.getAll(params).then((data) => {
-      setItems((prevState) => [...prevState, ...data.users]);
-      setIsLoading(false);
-    });
-  }, []);
-
-  const handleSearch = (query: string | undefined) => {
-    try {
-      const params = { query, fields: 'firstName,lastName,age,image' };
-      setIsLoading(true);
-      DataAPI.findAll(params).then((data) => {
-        setItems([...data.users]);
-      });
-    } catch (e) {
-      addToast('Request is failed!', {
-        appearance: 'error',
-        autoDismiss: true,
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const handleSearch = useCallback(
+    (query: string | undefined) => {
+      try {
+        const params = { query, fields: 'firstName,lastName,age,image' };
+        setIsLoading(true);
+        DataAPI.findAll(params).then((data) => {
+          setItems([...data.users]);
+        });
+      } catch (e) {
+        addToast('Request is failed!', {
+          appearance: 'error',
+          autoDismiss: true,
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [addToast]
+  );
 
   return (
     <>
