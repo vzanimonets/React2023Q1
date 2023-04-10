@@ -76,6 +76,81 @@ export const handlers = [
       })
     );
   }),
+  rest.get(`https://dummyjson.com/users/search`, (req, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.json({
+        users: [
+          {
+            id: 1,
+            firstName: 'Terry',
+            lastName: 'Medhurst',
+            age: 50,
+            image: 'https://robohash.org/hicveldicta.png',
+          },
+          {
+            id: 2,
+            firstName: 'Sheldon',
+            lastName: 'Quigley',
+            age: 28,
+            image: 'https://robohash.org/doloremquesintcorrupti.png',
+          },
+          {
+            id: 3,
+            firstName: 'Terrill',
+            lastName: 'Hills',
+            age: 38,
+            image: 'https://robohash.org/consequunturautconsequatur.png',
+          },
+          {
+            id: 4,
+            firstName: 'Miles',
+            lastName: 'Cummerata',
+            age: 49,
+            image: 'https://robohash.org/facilisdignissimosdolore.png',
+          },
+          {
+            id: 5,
+            firstName: 'Mavis',
+            lastName: 'Schultz',
+            age: 38,
+            image: 'https://robohash.org/adverovelit.png',
+          },
+          {
+            id: 6,
+            firstName: 'Alison',
+            lastName: 'Reichert',
+            age: 21,
+            image: 'https://robohash.org/laboriosamfacilisrem.png',
+          },
+          {
+            id: 7,
+            firstName: 'Oleta',
+            lastName: 'Abbott',
+            age: 31,
+            image: 'https://robohash.org/cupiditatererumquos.png',
+          },
+          {
+            id: 8,
+            firstName: 'Ewell',
+            lastName: 'Mueller',
+            age: 29,
+            image: 'https://robohash.org/quiaharumsapiente.png',
+          },
+          {
+            id: 9,
+            firstName: 'Demetrius',
+            lastName: 'Corkery',
+            age: 22,
+            image: 'https://robohash.org/excepturiiuremolestiae.png',
+          },
+        ],
+        total: 100,
+        skip: 0,
+        limit: 9,
+      })
+    );
+  }),
   rest.get(`https://dummyjson.com/users/1`, (req, res, ctx) => {
     return res(
       ctx.status(200),
