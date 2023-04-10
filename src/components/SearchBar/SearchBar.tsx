@@ -15,6 +15,7 @@ const SearchBar: FC<SearchBarPropType> = ({ onSubmit }) => {
 
   useEffect(() => {
     const valueRef = { current: inputRef.current };
+    onSubmit(inputRef?.current?.value);
     return () => {
       const value = JSON.stringify(valueRef.current?.value);
       localStorage.setItem('searchVal', value);
