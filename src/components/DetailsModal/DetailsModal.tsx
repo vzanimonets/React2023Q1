@@ -1,4 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
+import { useToasts } from 'react-toast-notifications';
 import styles from './modal.module.css';
 import Spinner from '../Spinner/Spinner';
 import { DataAPI } from '../../services/dataAPI';
@@ -26,15 +27,21 @@ export type DetailsType = {
 const DetailsModal: FC<ModalPropsType> = ({ id, isOpen, onClose }) => {
   const [data, setData] = useState<DetailsType>();
   const [isLoading, setIsLoading] = useState(true);
+  const { addToast } = useToasts();
+
   useEffect(() => {
     try {
       DataAPI.getOne(id).then((data) => {
+        setIsLoading(false);
         setData(data);
       });
-    } finally {
-      setIsLoading(false);
+    } catch (e) {
+      addToast('Request is failed!', {
+        appearance: 'error',
+        autoDismiss: true,
+      });
     }
-  }, [id]);
+  }, [id, addToast]);
 
   if (!isOpen) return null;
   return (
