@@ -10,16 +10,13 @@ const SearchBar: FC<SearchBarPropType> = ({ onSubmit }) => {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    onSubmit(inputRef?.current?.value);
+    const value = JSON.stringify(inputRef.current?.value);
+    localStorage.setItem('searchVal', value);
+    onSubmit(inputRef.current?.value);
   };
 
   useEffect(() => {
-    const valueRef = { current: inputRef.current };
     onSubmit(inputRef?.current?.value);
-    return () => {
-      const value = JSON.stringify(valueRef.current?.value);
-      localStorage.setItem('searchVal', value);
-    };
   }, [onSubmit]);
 
   return (
