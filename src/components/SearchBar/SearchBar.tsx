@@ -1,25 +1,27 @@
-import React, { FormEvent, useEffect, useRef } from 'react';
+import React, { FC, FormEvent, useEffect, useRef } from 'react';
 import styles from './search.module.css';
 
-const SearchBar = () => {
+type SearchBarPropType = {
+  onSubmit: (query: string | undefined) => void;
+};
+const SearchBar: FC<SearchBarPropType> = ({ onSubmit }) => {
   const initValue = !!localStorage.getItem('searchVal') ? localStorage.getItem('searchVal') : '';
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const saveToStorage = (e: FormEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
+    const value = JSON.stringify(inputRef.current?.value);
+    localStorage.setItem('searchVal', value);
+    onSubmit(inputRef.current?.value);
   };
 
   useEffect(() => {
-    const valueRef = { current: inputRef.current };
-    return () => {
-      const value = JSON.stringify(valueRef.current?.value);
-      localStorage.setItem('searchVal', value);
-    };
-  }, []);
+    onSubmit(inputRef?.current?.value);
+  }, [onSubmit]);
 
   return (
     <div className={styles.searchBox}>
-      <form onSubmit={saveToStorage}>
+      <form onSubmit={handleSubmit}>
         <div className={styles.search__input}>
           <button type="submit"></button>
           <input

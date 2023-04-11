@@ -1,23 +1,43 @@
-import React, { useEffect, useState } from 'react';
-import { ItemType } from '../components/App/App';
+import React, { FC, useCallback, useState } from 'react';
 import SearchBar from '../components/SearchBar/SearchBar';
 import List from '../components/List/List';
+import { ShotInfoType } from '../components/App/App';
+import { DataAPI } from '../services/dataAPI';
+import { useToasts } from 'react-toast-notifications';
 
-type PropsType = {
-  data: ItemType[];
-};
+const HomePage: FC = () => {
+  const [items, setItems] = useState<ShotInfoType[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-const HomePage = ({ data }: PropsType) => {
-  const [items, setItems] = useState<ItemType[]>([]);
+  const { addToast } = useToasts();
 
-  useEffect(() => {
-    setItems([...data]);
-  }, [data]);
+  const handleSearch = useCallback(
+    (query: string | undefined) => {
+      try {
+        const params = { query, fields: 'firstName,lastName,age,image' };
+        setIsLoading(true);
+        DataAPI.findAll(params).then((data) => {
+          setIsLoading(false);
+          setItems([...data.users]);
+        });
+      } catch (e) {
+        addToast('Request is failed!', {
+          appearance: 'error',
+          autoDismiss: true,
+        });
+      } finally {
+      }
+    },
+    [addToast]
+  );
 
   return (
     <>
-      <SearchBar />
-      <List data={items} />
+      <SearchBar onSubmit={handleSearch} />
+
+      <>
+        <List data={items} isLoading={isLoading} />
+      </>
     </>
   );
 };

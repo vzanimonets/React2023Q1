@@ -30,7 +30,7 @@ const Item = ({ title, description, image, status, delivery }: ItemPropsType) =>
           <i>{delivery}</i>
         </div>
         <div className={styles.card__btns}>
-          <button className={styles.btn}>Button</button>
+          <button className={styles.btn}>Show Details</button>
           <img src={LikeBtn} className={styles.icon__like} alt="" />
           <span className={styles.like__count}>324</span>
         </div>

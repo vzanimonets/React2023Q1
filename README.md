@@ -14,7 +14,7 @@ git clone {https://github.com/vzanimonets/React2023Q1.git}
 ## Switch branch
 
 ```
-git checkout React.Hooks
+git checkout React.API
 ```
 
 ## Installing NPM modules

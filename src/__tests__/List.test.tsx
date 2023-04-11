@@ -8,41 +8,35 @@ import { v4 as uuidv4 } from 'uuid';
 import pic12 from '../assets/images/12.jpg';
 
 describe('List', () => {
-  it('renders a list of items', () => {
+  it('renders a list of items', async () => {
     const items = [
       {
         id: uuidv4(),
-        title: 'Title',
-        description: 'Text',
+        firstName: 'Title-1',
+        lastName: 'Text',
         image: `${pic12}`,
-        delivery: 'No',
-        status: 'Temporarily Out Of Stock',
+        age: 10,
       },
       {
         id: uuidv4(),
-        title: 'Title-1',
-        description: 'Text',
+        firstName: 'Title-2',
+        lastName: 'Text',
         image: `${pic12}`,
-        delivery: 'No',
-        status: 'Temporarily Out Of Stock',
+        age: 10,
       },
       {
         id: uuidv4(),
-        title: 'Title-2',
-        description: 'Text',
+        firstName: 'Title-3',
+        lastName: 'Text',
         image: `${pic12}`,
-        delivery: 'Yes',
-        status: 'In stock',
+        age: 10,
       },
     ];
 
-    render(<List data={items} />);
+    render(<List data={items} isLoading={false} />);
 
-    expect(screen.getByText('Title')).toBeInTheDocument();
-    expect(screen.getByText('Title-1')).toBeInTheDocument();
-    expect(screen.getByText('Title-2')).toBeInTheDocument();
-
-    expect(screen.getByText('In stock')).toBeInTheDocument();
-    expect(screen.getByText('Yes')).toBeInTheDocument();
+    expect(await screen.getByText('Title-1 Text,10')).toBeInTheDocument();
+    expect(await screen.getByText('Title-2 Text,10')).toBeInTheDocument();
+    expect(await screen.getByText('Title-3 Text,10')).toBeInTheDocument();
   });
 });
