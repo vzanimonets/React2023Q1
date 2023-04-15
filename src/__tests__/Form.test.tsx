@@ -1,17 +1,22 @@
-import { render } from '@testing-library/react';
+import { act, render } from '@testing-library/react';
 import { describe, it } from 'vitest';
 import { fireEvent } from '@testing-library/dom';
 import Form from '../components/Form/Form';
 import React from 'react';
 import { ToastProvider } from 'react-toast-notifications';
+import { store } from '../redux/store';
+import { Provider } from 'react-redux';
 
 describe('Form', () => {
-  it('submits the form when all fields are filled correctly', () => {
+  test('submits the form when all fields are filled correctly', async () => {
     const form = render(
-      <ToastProvider>
-        <Form addItem={() => {}} />
-      </ToastProvider>
+      <Provider store={store}>
+        <ToastProvider>
+          <Form addItem={() => {}} />
+        </ToastProvider>
+      </Provider>
     );
+
     const nameInput = form.getByLabelText('Item Title');
     const descriptionTextarea = form.getByLabelText('Item description');
     const statusInput = form.getByLabelText('Status');
@@ -29,13 +34,21 @@ describe('Form', () => {
     fireEvent.change(fileInput, {
       target: { files: [new File(['file contents'], 'filename.txt')] },
     });
-    fireEvent.click(submit);
+    //fireEvent.click(submit);
+    await act(async () => {
+      fireEvent.change(fileInput, {
+        target: { files: [new File(['file contents'], 'filename.txt')] },
+      });
+      fireEvent.click(submit);
+    });
   });
   it('radio Delivery', () => {
     const form = render(
-      <ToastProvider>
-        <Form addItem={() => {}} />
-      </ToastProvider>
+      <Provider store={store}>
+        <ToastProvider>
+          <Form addItem={() => {}} />
+        </ToastProvider>
+      </Provider>
     );
     const radio = form.getByLabelText('No');
     expect(radio).toBeInTheDocument();
@@ -44,9 +57,11 @@ describe('Form', () => {
   });
   it('select', () => {
     const form = render(
-      <ToastProvider>
-        <Form addItem={() => {}} />
-      </ToastProvider>
+      <Provider store={store}>
+        <ToastProvider>
+          <Form addItem={() => {}} />
+        </ToastProvider>
+      </Provider>
     );
     const select = form.getByLabelText('Status');
     expect(select).toBeInTheDocument();
@@ -56,9 +71,11 @@ describe('Form', () => {
 
   it('reset form', () => {
     const form = render(
-      <ToastProvider>
-        <Form addItem={() => {}} />
-      </ToastProvider>
+      <Provider store={store}>
+        <ToastProvider>
+          <Form addItem={() => {}} />
+        </ToastProvider>
+      </Provider>
     );
     const reset = form.getByTestId('reset');
     const select = form.getByLabelText('Status');

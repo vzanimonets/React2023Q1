@@ -39,4 +39,9 @@ describe('List', () => {
     expect(await screen.getByText('Title-2 Text,10')).toBeInTheDocument();
     expect(await screen.getByText('Title-3 Text,10')).toBeInTheDocument();
   });
+  it('renders no exact matches', async () => {
+    render(<List data={[]} isLoading={false} />);
+
+    expect(await screen.getByText('No exact matches found!')).toBeInTheDocument();
+  });
 });
