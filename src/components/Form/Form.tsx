@@ -77,7 +77,7 @@ const Form: FC<FormType> = ({ addItem }) => {
 
   const changeFile = ({ target }: BaseSyntheticEvent) => {
     const { files } = target;
-    setFileName(files[0].name);
+    setFileName(files[0]?.name);
   };
 
   const resetForm = useCallback(() => {
