@@ -9,6 +9,7 @@ import FieldSet from '../FieldSet/FieldSet';
 import LabeledTextArea from '../LabeledTextArae/LabeledTextArea';
 import LabeledSelect from '../LabeledSelect/LabeledSelect';
 import { useToasts } from 'react-toast-notifications';
+import isDateInFuture from '../../utils/checkDate';
 
 export interface validateFields {
   title: string;
@@ -77,12 +78,6 @@ const Form: FC<FormType> = ({ addItem }) => {
   const changeFile = ({ target }: BaseSyntheticEvent) => {
     const { files } = target;
     setFileName(files[0].name);
-  };
-
-  const validateDate = (value: string) => {
-    if (new Date(value).getTime() <= new Date().getTime()) {
-      return 'Published date can not be later than today';
-    }
   };
 
   const resetForm = useCallback(() => {
@@ -169,7 +164,6 @@ const Form: FC<FormType> = ({ addItem }) => {
               label="No"
               type="radio"
               id="radio1"
-              placeholder="Item title"
               name="delivery"
               defaultValue="No"
               register={register}
@@ -182,21 +176,15 @@ const Form: FC<FormType> = ({ addItem }) => {
               label="Yes"
               type="radio"
               id="radio2"
-              placeholder="Item title"
               name="delivery"
               defaultValue="No"
               register={register}
               errors={errors.delivery?.message}
               rules={{
-                required: true,
+                required: 'This field is required',
               }}
             />
           </div>
-          {errors.delivery?.type === 'required' && (
-            <span className={styles.error__message} data-testid="form-error">
-              This field is required.
-            </span>
-          )}
         </FieldSet>
         <FieldSet errors={errors.published?.message}>
           <LabeledInput
@@ -208,7 +196,9 @@ const Form: FC<FormType> = ({ addItem }) => {
             errors={errors.published?.message}
             rules={{
               required: 'This field is required',
-              validate: validateDate,
+              valueAsDate: true,
+              validate: (value) =>
+                isDateInFuture(value) || 'Published date can not be later than today',
             }}
           />
         </FieldSet>
@@ -224,15 +214,10 @@ const Form: FC<FormType> = ({ addItem }) => {
               register={register}
               name="terms"
               rules={{
-                required: true,
+                required: 'terms should be agreed',
               }}
             />
           </span>
-          {errors.terms?.type === 'required' && (
-            <span className={styles.error__message} data-testid="form-error">
-              terms should be agreed.
-            </span>
-          )}
         </FieldSet>
         <fieldset>
           <button className={styles.btn} type="submit" data-testid="submit">
