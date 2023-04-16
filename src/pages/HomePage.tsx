@@ -14,7 +14,7 @@ const HomePage: FC = () => {
   } = useFindAllQuery({
     query,
     fields: 'firstName,lastName,age,image',
-    limit: 10,
+    limit: 9,
   });
 
   return (

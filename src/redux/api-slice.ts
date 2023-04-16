@@ -3,13 +3,6 @@ import { RequestType } from '../components/App/App';
 import { DetailsType } from '../components/DetailsModal/DetailsModal';
 import { axiosBaseQuery } from './axios-base-query';
 
-// interface Api {
-//   id: string;
-//   name: string;
-//   image: {
-//     url: string;
-//   };
-// }
 interface findAllArgs {
   query?: string;
   fields?: string;
