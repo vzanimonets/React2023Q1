@@ -16,7 +16,11 @@ const LabeledInput: FC<InputProps> = ({ register, name, label, rules, errors, ..
     <>
       {label && <label htmlFor={rest?.id}>{label}</label>}
       <input {...(register && register(name, rules))} {...rest} />
-      {errors && <span className={styles.error__message}>{errors}</span>}
+      {errors && (
+        <span className={styles.error__message} data-testid="test-label-error">
+          {errors}
+        </span>
+      )}
     </>
   );
 };

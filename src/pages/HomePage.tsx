@@ -1,43 +1,27 @@
-import React, { FC, useCallback, useState } from 'react';
+import React, { FC, useState } from 'react';
 import SearchBar from '../components/SearchBar/SearchBar';
 import List from '../components/List/List';
-import { ShotInfoType } from '../components/App/App';
-import { DataAPI } from '../services/dataAPI';
-import { useToasts } from 'react-toast-notifications';
+import { useFindAllQuery } from '../redux/api-slice';
+import Spinner from '../components/Spinner/Spinner';
 
 const HomePage: FC = () => {
-  const [items, setItems] = useState<ShotInfoType[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  const { addToast } = useToasts();
-
-  const handleSearch = useCallback(
-    (query: string | undefined) => {
-      try {
-        const params = { query, fields: 'firstName,lastName,age,image' };
-        setIsLoading(true);
-        DataAPI.findAll(params).then((data) => {
-          setIsLoading(false);
-          setItems([...data.users]);
-        });
-      } catch (e) {
-        addToast('Request is failed!', {
-          appearance: 'error',
-          autoDismiss: true,
-        });
-      } finally {
-      }
+  const [query, setQuery] = useState<string | undefined>('');
+  const {
+    data = {
+      users: [],
     },
-    [addToast]
-  );
+    isFetching,
+  } = useFindAllQuery({
+    query,
+    fields: 'firstName,lastName,age,image',
+    limit: 9,
+  });
 
   return (
     <>
-      <SearchBar onSubmit={handleSearch} />
-
-      <>
-        <List data={items} isLoading={isLoading} />
-      </>
+      {isFetching}
+      <SearchBar onSubmit={(q) => setQuery(q)} />
+      {isFetching ? <Spinner /> : <List data={data?.users} isLoading={isFetching} />}
     </>
   );
 };

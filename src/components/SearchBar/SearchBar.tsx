@@ -1,17 +1,19 @@
 import React, { FC, FormEvent, useEffect, useRef } from 'react';
 import styles from './search.module.css';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { setValue } from '../../redux/search-slice';
 
 type SearchBarPropType = {
   onSubmit: (query: string | undefined) => void;
 };
 const SearchBar: FC<SearchBarPropType> = ({ onSubmit }) => {
-  const initValue = !!localStorage.getItem('searchVal') ? localStorage.getItem('searchVal') : '';
+  const initValue = useAppSelector((state) => state.search.value);
   const inputRef = useRef<HTMLInputElement>(null);
+  const dispatch = useAppDispatch();
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    const value = JSON.stringify(inputRef.current?.value);
-    localStorage.setItem('searchVal', value);
+    dispatch(setValue(inputRef.current?.value));
     onSubmit(inputRef.current?.value);
   };
 
@@ -24,12 +26,7 @@ const SearchBar: FC<SearchBarPropType> = ({ onSubmit }) => {
       <form onSubmit={handleSubmit}>
         <div className={styles.search__input}>
           <button type="submit"></button>
-          <input
-            defaultValue={initValue && JSON.parse(initValue)}
-            type="search"
-            placeholder="Search..."
-            ref={inputRef}
-          />
+          <input defaultValue={initValue} type="search" placeholder="Search..." ref={inputRef} />
         </div>
         <div className={styles.radio}>
           <input type="radio" id="searchChoice1" name="search" value="site" defaultChecked />

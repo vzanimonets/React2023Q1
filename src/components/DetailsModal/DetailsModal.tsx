@@ -1,8 +1,7 @@
-import React, { FC, useEffect, useState } from 'react';
-import { useToasts } from 'react-toast-notifications';
+import React, { FC } from 'react';
 import styles from './modal.module.css';
 import Spinner from '../Spinner/Spinner';
-import { DataAPI } from '../../services/dataAPI';
+import { useGetOneQuery } from '../../redux/api-slice';
 
 type ModalPropsType = {
   isOpen: boolean;
@@ -25,24 +24,7 @@ export type DetailsType = {
 };
 
 const DetailsModal: FC<ModalPropsType> = ({ id, isOpen, onClose }) => {
-  const [data, setData] = useState<DetailsType>();
-  const [isLoading, setIsLoading] = useState(true);
-  const { addToast } = useToasts();
-
-  useEffect(() => {
-    try {
-      DataAPI.getOne(id).then((data) => {
-        setIsLoading(false);
-        setData(data);
-      });
-    } catch (e) {
-      addToast('Request is failed!', {
-        appearance: 'error',
-        autoDismiss: true,
-      });
-    }
-  }, [id, addToast]);
-
+  const { data, isFetching } = useGetOneQuery(id);
   if (!isOpen) return null;
   return (
     <div onClick={onClose} data-testid="overlay" className={styles.overlay}>
@@ -59,7 +41,7 @@ const DetailsModal: FC<ModalPropsType> = ({ id, isOpen, onClose }) => {
           </span>
           <div className={styles.content}>
             <span className={styles.title}>Details information</span>
-            {isLoading ? (
+            {isFetching ? (
               <Spinner />
             ) : (
               <div className={styles.content__inner}>

@@ -11,3 +11,5 @@ beforeAll(() =>
 );
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
+
+window.URL.createObjectURL = function () {};
