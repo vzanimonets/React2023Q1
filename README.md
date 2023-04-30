@@ -1,4 +1,4 @@
-# React. Components
+# React. SSR/SSG
 
 ## Prerequisites
 
